@@ -1,6 +1,6 @@
-name: test
+name: Build Contracts
 
-on: workflow_dispatch
+on: [ push ]
 
 env:
   FOUNDRY_PROFILE: ci
