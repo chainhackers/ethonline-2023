@@ -1,66 +1,41 @@
-## Foundry
+# ProfitPals: Introducing Social Liquidity Mining
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+ChainHackers presents ProfitPals, our ETHOnline2023 entry, pioneering the concept of social liquidity mining in DeFi.
 
-Foundry consists of:
+---
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Overview
 
-## Documentation
+ProfitPals aggregates liquidity via fund pools, managed by expert operators for optimized yield farming. Investors provide an anchor currency, minting share tokens as proof of stake.
 
-https://book.getfoundry.sh/
+### Features:
 
-## Usage
+- **Fund Pools**: Managed by operators who employ best yield farming strategies using a trusted token list. Operators can also pause new investments as a safety measure.
 
-### Build
+- **Investor Interaction**: Investors mint share tokens by depositing anchor currency. These tokens enable permissionless withdrawals without the operator's intervention.
 
-```shell
-$ forge build
-```
+- **Protocol Control & Security**: Interactions are facilitated through the FundPool contract, ensuring predictability and a trustless environment.
 
-### Test
+Our ETHOnline2023 focus: integration with Uniswap and harnessing Safe smart wallets for the Fund Pool foundation.
 
-```shell
-$ forge test
-```
+## Development
 
-### Format
+Monorepo setup: smart contracts in root, frontend in its folder. We integrate Foundry/Forge with GitHub Actions for streamlined CI/CD.
 
-```shell
-$ forge fmt
-```
+## Links
+- **ChainHackers**: [https://chainhackers.xyz/](https://chainhackers.xyz/)
+- **ProfitPals**: [https://profitpals.chainhackers.xyz/](https://profitpals.chainhackers.xyz/)
 
-### Gas Snapshots
+## Contribute
 
-```shell
-$ forge snapshot
-```
+Feedback and pull requests are welcome. Kindly adhere to contribution guidelines.
 
-### Anvil
+## License
 
-```shell
-$ anvil
-```
+MIT License.
 
-### Deploy
+Thanks to the ETHOnline2023 community for the support!
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+---
 
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+Unearth the potential of social liquidity mining with ProfitPals!
