@@ -1,0 +1,23 @@
+name: Build and Deploy
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Build with Vite
+        run: npm run build
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: dist/
