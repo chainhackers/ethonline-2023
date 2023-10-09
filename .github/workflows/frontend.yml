@@ -53,7 +53,7 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Compress Build Artifact
-        run: tar -czf ethonline-2023-build-${{ github.run_id }}.tgz ./ethonline-2023-build-${{ github.run_id }}
+        run: tar -czf ethonline-2023-build-${{ github.run_id }}.tgz ./ethonline-2023-build-${{ github.run_id }}/*
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
