@@ -23,11 +23,11 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        working-directory: ${{ GITHUB_WORKSPACE }}/frontend
+        working-directory: ${{ vars.GITHUB_WORKSPACE }}/frontend
         run: yarn install --frozen-lockfile
 
       - name: Build with Vite
-        working-directory: ${{ GITHUB_WORKSPACE }}/frontend
+        working-directory: ${{ vars.GITHUB_WORKSPACE }}/frontend
         run: yarn build
 
       - name: Put Git tag and time to .env file
