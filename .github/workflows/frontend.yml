@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     env:
-      SCRIPT_NAME: 'pm2-start-dev.sh'
+      SCRIPT_NAME: 'deploy-dev.sh'
     needs: build
     steps:
       - name: Download all workflow run artifacts
