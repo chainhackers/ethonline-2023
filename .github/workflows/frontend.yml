@@ -32,8 +32,8 @@ jobs:
 
       - name: Put Git tag and time to .env file
         run: |
-          echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} > ${{ github.workspace }}/dist/.env
-          echo VITE_REACT_APP_GIT_DATE="$(date +'%Y-%m-%d')" >> ${{ github.workspace }}/dist/.env        
+          echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} > ${{ github.workspace }}/frontend/dist/.env
+          echo VITE_REACT_APP_GIT_DATE="$(date +'%Y-%m-%d')" >> ${{ github.workspace }}/frontend/dist/.env        
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
