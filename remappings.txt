@@ -1,2 +1,3 @@
 @safe-global=lib/safe-global/contracts
 @openzeppelin=lib/openzeppelin/contracts
+@safe-contracts=lib/safe-contracts/contracts
