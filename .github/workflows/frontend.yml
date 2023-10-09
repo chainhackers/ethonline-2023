@@ -54,10 +54,10 @@ jobs:
 
       - run: ls -l
 
-      - run: ls -l ./profitpals-dist-${{ github.run_id }}
+      - run: ls -l ./ethonline-2023-build-${{ github.run_id }}
 
       - name: Compress Build Artifact
-        run: tar -czf profitpals-dist-${{ github.run_id }}.tgz ./profitpals-dist-${{ github.run_id }}/frontend/dist
+        run: tar -czf ethonline-2023-build-${{ github.run_id }}.tgz ./ethonline-2023-build-${{ github.run_id }}/frontend/dist
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -67,6 +67,6 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
       - name: Copy artifact to server
-        run: scp ./profitpals-dist-${{ github.run_id }}.tgz ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.BUILDS_PATH }}
+        run: scp ./ethonline-2023-build-${{ github.run_id }}.tgz ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.BUILDS_PATH }}
       - name: Restart deployed build
         run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "/home/${{ secrets.USERNAME }}/${{ env.SCRIPT_NAME }} ${{ github.run_id }}"
