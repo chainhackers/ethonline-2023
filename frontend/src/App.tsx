@@ -10,8 +10,11 @@ import DevModeToggle from './components/devModeToggle/DevModeToggle';
 function App() {
   const [count, setCount] = useState(0);
   const [devModeState, setDevModeState] = useState(false);
-  const versionDeploy = import.meta.env.VITE_REACT_APP_GIT_TAG;
-  const dateDeploy = import.meta.env.VITE_REACT_APP_GIT_DATE;
+  const versionGitTag = import.meta.env.VITE_REACT_APP_GIT_TAG;
+  const gitDate = import.meta.env.VITE_REACT_APP_GIT_DATE;
+
+  console.log('VITE_REACT_APP_GIT_TAG - ', versionGitTag);
+  console.log('VITE_REACT_APP_GIT_DATE - ', gitDate);
 
   const handleToggleDevMode = (value: boolean) => {
     setDevModeState(value);
@@ -19,13 +22,13 @@ function App() {
 
   return (
     <div className='app appBox'>
-      {versionDeploy && dateDeploy && (
+      {versionGitTag && gitDate && (
         <div>
           <DevModeToggle isDevMode={devModeState} handleToggleDevMode={handleToggleDevMode} />
           {devModeState && (
             <div>
-              <p>Version: {versionDeploy}</p>
-              <p>Date: {dateDeploy}</p>
+              <p>Version: {versionGitTag}</p>
+              <p>Date: {gitDate}</p>
             </div>
           )}
         </div>
