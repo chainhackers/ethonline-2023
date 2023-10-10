@@ -1,0 +1,14 @@
+.devModeToggle {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  min-width: 80px;
+  display: block;
+  border-radius: 10px;
+  font-size: 12px;
+  background-color: var(--blue);
+  position: absolute;
+  top: 0;
+  left: 0;
+}

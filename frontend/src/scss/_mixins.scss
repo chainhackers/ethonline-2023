@@ -1,0 +1,6 @@
+@mixin fontStyle($fontSizePx, $lineHeightPx: 0) {
+  font-size: $fontSizePx + px;
+  @if $lineHeightPx != 0 {
+    line-height: calc($lineHeightPx / $fontSizePx);
+  }
+}

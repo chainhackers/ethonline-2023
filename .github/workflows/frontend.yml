@@ -26,6 +26,16 @@ jobs:
         working-directory: ${{ github.workspace }}/frontend
         run: yarn install --frozen-lockfile
 
+      - name: Load environment variables
+        run: |
+          echo "${{ secrets.ENV_VARIABLES }}" > .env
+          echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} >> .env
+          echo VITE_REACT_APP_GIT_DATE="$(git log -1 --format=%cd)" >> .env
+
+      - name: ESlint check
+        working-directory: ${{ github.workspace }}/frontend
+        run: yarn lint
+
       - name: Build with Vite
         working-directory: ${{ github.workspace }}/frontend
         run: yarn build
@@ -33,7 +43,7 @@ jobs:
       - name: Put Git tag and time to .env file
         run: |
           echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} > ${{ github.workspace }}/frontend/dist/.env
-          echo VITE_REACT_APP_GIT_DATE="$(date +'%Y-%m-%d')" >> ${{ github.workspace }}/frontend/dist/.env        
+          echo VITE_REACT_APP_GIT_DATE="$(date +'%Y-%m-%d')" >> ${{ github.workspace }}/frontend/dist/.env
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
