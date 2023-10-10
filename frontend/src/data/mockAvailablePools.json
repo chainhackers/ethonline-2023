@@ -6,7 +6,8 @@
     "tokens": ["0x6265617665726275696c642e6f7267","0x6265617665726275696c642e6f7267", "0x6265617665726275696c642e6f7267"],
     "operatorFee": 12,
     "total": 234500,
-    "profitPercent": 10
+    "profitPercent": 10,
+    "profit": 3453453
   },
   {
     "address": "0x4681de1e080e889fad73853fa7adaa0be39e433f",
@@ -15,7 +16,8 @@
     "tokens": ["0x6265617665726275696c642e6f7267","0x6265617665726275696c642e6f7267", "0x6265617665726275696c642e6f7267"],
     "operatorFee": 12,
     "total": 234500,
-    "profitPercent": 10
+    "profitPercent": 10,
+    "profit" : 120000
   },
   {
     "address": "0x4681de1e080e889fad73853fa7adaa0be39e433f",
@@ -24,6 +26,7 @@
     "tokens": ["0x6265617665726275696c642e6f7267","0x6265617665726275696c642e6f7267", "0x6265617665726275696c642e6f7267"],
     "operatorFee": 12,
     "total": 234500,
-    "profitPercent": 10
+    "profitPercent": 10,
+    "profit" : 30000
   }
 ]
