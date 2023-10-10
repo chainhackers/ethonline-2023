@@ -1,0 +1,29 @@
+[
+  {
+    "address": "0x4681de1e080e889fad73853fa7adaa0be39e433f",
+    "date":1696954119482,
+    "anchorCurrency" : "0x6265617665726275696c642e6f7267",
+    "tokens": ["0x6265617665726275696c642e6f7267","0x6265617665726275696c642e6f7267", "0x6265617665726275696c642e6f7267"],
+    "operatorFee": 12,
+    "total": 234500,
+    "profitPercent": 10
+  },
+  {
+    "address": "0x4681de1e080e889fad73853fa7adaa0be39e433f",
+    "date":1696954119482,
+    "anchorCurrency" : "0x6265617665726275696c642e6f7267",
+    "tokens": ["0x6265617665726275696c642e6f7267","0x6265617665726275696c642e6f7267", "0x6265617665726275696c642e6f7267"],
+    "operatorFee": 12,
+    "total": 234500,
+    "profitPercent": 10
+  },
+  {
+    "address": "0x4681de1e080e889fad73853fa7adaa0be39e433f",
+    "date":1696954119482,
+    "anchorCurrency" : "0x6265617665726275696c642e6f7267",
+    "tokens": ["0x6265617665726275696c642e6f7267","0x6265617665726275696c642e6f7267", "0x6265617665726275696c642e6f7267"],
+    "operatorFee": 12,
+    "total": 234500,
+    "profitPercent": 10
+  }
+]
