@@ -16,7 +16,15 @@
 
     /* Linting */
     "strict": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "./",
+    "paths": {
+      "src/*": [ "./src/*" ],
+      "Components/*": [ "./src/components/*" ],
+      "Components": [ "./src/components" ],
+      "Pages/*": [ "./src/pages/*" ],
+      "Pages": [ "./src/pages" ]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
