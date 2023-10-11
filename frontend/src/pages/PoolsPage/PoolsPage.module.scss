@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  padding: 0 122px;
+
+  .poolsPage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+}
