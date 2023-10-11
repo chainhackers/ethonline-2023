@@ -1,0 +1,51 @@
+@mixin dimmedText {
+  color: var(--m-3-sys-dark-on-surface-variant, #C3C6CF);
+  font-family: Noto Sans;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.25px;
+}
+
+.tableContainer {
+  display: flex;
+  padding: 24px;
+  width: 100%;
+  border-radius: 16px;
+  background: #1B1B1F;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+
+    thead, tbody {
+      padding: 24px;
+    }
+
+    thead {
+      tr {
+        border-bottom: 1px solid #A3CDDC;;
+      }
+    }
+    tbody {
+      tr {
+        border-bottom: 1px solid #43474E;
+      }
+    }
+
+    th {
+      border: none;
+      padding: 0 8px 22px;
+      text-align: left;
+
+    };
+    td {
+      border: none;
+      padding: 22px 8px;
+
+    }
+  }
+}
+
