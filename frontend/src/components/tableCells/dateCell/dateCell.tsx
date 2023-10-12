@@ -1,7 +1,8 @@
 import { FC } from 'react';
-// import styles from './dateCell.module.scss';
-import { DateCellPropsI } from './dateCellProps';
+import { DateCellPropsI } from './DateCellProps';
+import { dateFromTimestamp } from 'Utils/dateFromTimestamp';
 
-export const DateCell: FC<DateCellPropsI> = () => {
-  return <div>dateCell</div>;
+export const DateCell: FC<DateCellPropsI> = ({ cellValue }) => {
+  const formattedDate = dateFromTimestamp(cellValue);
+  return <div>{formattedDate}</div>;
 };
