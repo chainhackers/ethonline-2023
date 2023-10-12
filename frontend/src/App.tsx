@@ -1,11 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { PoolsPage } from 'Pages';
-import Root from 'Pages/root.tsx';
+// import Root from 'Pages/root.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
+    element: <PoolsPage poolsType={'All Pools'} />,
   },
   {
     path: '/available-pools',
