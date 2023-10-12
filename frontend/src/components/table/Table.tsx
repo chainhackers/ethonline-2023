@@ -1,9 +1,9 @@
 import { TablePropsI } from './TableProps.ts';
 import styles from './Table.module.scss';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 export const Table: FC<TablePropsI> = () => {
-  const [pools, setPools] = useState([
+  const pools = [
     {
       address: '0x4681de1e080e889fad73853fa7adaa0be39e433f',
       date: 1696954119482,
@@ -46,7 +46,7 @@ export const Table: FC<TablePropsI> = () => {
       profitPercent: 10,
       profit: 30000,
     },
-  ]);
+  ];
 
   const tableRowMap = {
     date: { title: 'Date', component: 'some tsx' },
