@@ -37,6 +37,8 @@ out/
 # Docs
 docs/
 
+broadcast/
+
 # Dotenv file
 .env
 
