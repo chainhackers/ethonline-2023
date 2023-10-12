@@ -96,10 +96,10 @@ export const Table: FC<TablePropsI> = () => {
           {pools.map((pool) => (
             <tr key={pool.address}>
               {Object.entries(tableRowMap).map(([key, value]) => {
-                const TagName = cells[value.component as CellsT];
+                const TagName = cells[value.component as keyof CellsT];
                 return (
                   <td key={key}>
-                    <TagName cellValue={pool[key as keyof PoolT]} />
+                    <TagName cellValue={pool[key as keyof PoolT] as number} />
                   </td>
                 );
               })}
