@@ -1,0 +1,29 @@
+.form_header {
+  padding-bottom: 32px;
+  border-bottom: 1px solid #A3CDDC;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__link {
+    color: #43474E;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.25px;
+    display: flex;
+    align-items: center;
+
+    &_icon {
+      margin-right: 8px;
+    }
+  }
+
+  &__title {
+    font-size: 28px;
+    line-height: 1.28;
+    font-family: 'Roboto', sans-serif;
+    color: #FFF;
+    font-weight: 400;
+  }
+}
