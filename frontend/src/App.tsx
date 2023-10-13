@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { PoolsPage } from 'Pages';
-// import Root from 'Pages/root.tsx';
+import './index.scss';
+import '@rainbow-me/rainbowkit/styles.css';
 
 const router = createBrowserRouter([
   {
