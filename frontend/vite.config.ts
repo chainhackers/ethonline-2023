@@ -13,6 +13,7 @@ export default defineConfig({
       Components: path.resolve(__dirname, './src/components'),
       Pages: path.resolve(__dirname, './src/pages'),
       Utils: path.resolve(__dirname, './src/utils'),
+      Icons: path.resolve(__dirname, './src/icons'),
     },
   },
   plugins: [react()],
