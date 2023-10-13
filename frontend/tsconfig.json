@@ -26,6 +26,8 @@
       "Pages": [ "./src/pages" ],
       "Utils/*": [ "./src/utils/*" ],
       "Utils": [ "./src/utils" ],
+      "Icons/*": [ "./src/icons/*" ],
+      "Icons": [ "./src/icons" ],
     }
   },
   "include": ["src"],
