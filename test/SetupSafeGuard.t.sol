@@ -1,7 +1,7 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import { Test, console2 } from "forge-std/Test.sol";
+import {Test, console2} from "forge-std/Test.sol";
 import "@openzeppelin/token/ERC20/IERC20.sol";
 import {GnosisSafe} from "@safe-contracts/GnosisSafe.sol";
 import {GnosisSafeL2} from "@safe-contracts/GnosisSafeL2.sol";
@@ -37,7 +37,7 @@ contract SetupSafeGuard is Test {
                 0,
                 payable(0))
         );
-        GnosisSafeProxy proxy = GnosisSafeProxyFactory(SAFE_PROXY_FACTORY).createProxyWithNonce(
+        proxy = GnosisSafeProxyFactory(SAFE_PROXY_FACTORY).createProxyWithNonce(
             SINGLETON_ADDRESS,
             data,
             1234567
@@ -46,7 +46,7 @@ contract SetupSafeGuard is Test {
         vm.startPrank(USDC_BIG_HOLDER);
         usdc.transfer(address(this), 1000 * 10 ** 6);
 
-        payable(address(this)).transfer(10**18);
+        payable(address(this)).transfer(10 ** 18);
         vm.stopPrank();
     }
 
@@ -64,7 +64,7 @@ contract SetupSafeGuard is Test {
 //    )
 
     function test_deploySafeAndAddGuard() public {
-        UniswapOnlyGuard guard = new UniswapOnlyGuard();
+        UniswapOnlyGuard guard = new UniswapOnlyGuard(UNISWAP_PERMIT2_POLYGON);
         // GuardManager.setGuard(address guard)
         bytes memory setGuardCallData = abi.encodeCall(
             GuardManager.setGuard,

@@ -14,15 +14,24 @@ contract DepositAnchorCurrencyTest is Test {
     address USDC_BIG_HOLDER = 0xF977814e90dA44bFA03b6295A0616a897441aceC;
 
     IERC20 usdc = IERC20(USDC_POLYGON);
+    IERC20 wbtc = IERC20(WBTC_POLYGON);
 
+    IERC20[] tokens = new IERC20[](1);
     ProfitPalsVault public profitPalsVault;
 
     function setUp() public {
+        tokens.push(usdc);
+
         profitPalsVault = new ProfitPalsVault(
-            SAFE_PROXY_FACTORY_130_POLYGON,
-            SAFE_LOGIC_SINGLETON_POLYGON,
             usdc,
-            "testUSDCVault", "tUSDCv");
+            tokens,
+            2000,
+
+            "testUSDCVault", "tUSDCv",
+
+            SAFE_PROXY_FACTORY_130_POLYGON,
+            SAFE_LOGIC_SINGLETON_POLYGON
+        );
 
         vm.startPrank(USDC_BIG_HOLDER);
         usdc.transfer(address(this), 1000 * 10 ** 6);

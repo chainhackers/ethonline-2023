@@ -4,7 +4,13 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/token/ERC20/IERC20.sol";
 
 interface IProfitPalsVaultFactory {
-    function createVault(IERC20 anchorCurrency, string memory name_, string memory symbol_) external returns (address);
+    function createVault(
+        IERC20 anchorCurrency,
+        address[] memory tokens,
+        uint256 operatorFee,
+        string memory name_,
+        string memory symbol_
+    ) external returns (address);
 
     function safeLogicSingleton() external view returns (address);
 

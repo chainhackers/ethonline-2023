@@ -1,11 +1,12 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "@safe-contracts/base/GuardManager.sol";
 
 contract UniswapOnlyGuard is Guard {
-    constructor(){
-
+    address immutable permit2;
+    constructor(address permit2_){
+        permit2 = permit2_;
     }
 
     function checkTransaction(
@@ -21,7 +22,7 @@ contract UniswapOnlyGuard is Guard {
         bytes memory signatures,
         address msgSender
     ) external override {
-        require(to == address(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D), "Only Uniswap transactions allowed");
+        require(to == permit2, "Only approvals to Uniswap Permit2 allowed");
     }
 
     function checkAfterExecution(bytes32 txHash, bool success) external override {
