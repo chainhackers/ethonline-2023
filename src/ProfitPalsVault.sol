@@ -54,10 +54,8 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
         GnosisSafeProxyFactory(safeProxyFactory).createProxyWithNonce(
             safeLogicSingleton,
             safeAccountSetupData,
-            6661489
+            1234567
         );
-
-        anchorCurrency = anchorCurrency_;
     }
 
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {
