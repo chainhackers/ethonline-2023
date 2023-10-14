@@ -10,7 +10,7 @@ export const Header: FC = () => {
   return (
     <header className={styles.header}>
       <Link to={'/'}>
-        <img src='../../../public/assets/Logo.avif' alt='' />
+        <img src='assets/Logo.avif' alt='' />
       </Link>
       <nav>
         <Link className={currentPath === '/' ? styles.active : ''} to={'/'}>
