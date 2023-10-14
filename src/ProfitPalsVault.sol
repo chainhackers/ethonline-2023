@@ -29,25 +29,10 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
         string memory symbol_
     )
     ERC4626(anchorCurrency_) ERC20(name_, symbol_){
-        //TODO init safe account
         operator = tx.origin; //TODO think about this
-        address[] memory owners = new address[](1);
-        owners[0] = address(this);
         anchorCurrency = anchorCurrency_;
         operatorFee = operatorFee_;
         allowedTokens = tokens;
-
-        bytes memory safeAccountSetupData = abi.encodeCall(
-            GnosisSafe.setup,
-            (owners,
-                1,
-                address(0),
-                "",
-                address(0),
-                address(0),
-                0,
-                payable(0))
-        );
     }
 
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {

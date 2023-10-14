@@ -15,6 +15,12 @@ contract UniswapOnlyGuard is Guard {
         allowedTokens = allowedTokens_;
     }
 
+    // TODO not sure, experimenting, consider removing this
+    // solhint-disable-next-line payable-fallback
+    fallback() external {
+        // We don't revert on fallback to avoid issues in case of a Safe upgrade
+        // E.g. The expected check method might change and then the Safe would be locked.
+    }
     function checkTransaction(
         address to,
         uint256 value,
@@ -28,7 +34,7 @@ contract UniswapOnlyGuard is Guard {
         bytes memory signatures,
         address msgSender
     ) external override {
-        require(to == address(usdc), "Only approvals to Uniswap Permit2 allowed"); //TODO iterate over allowed tokens
+//        require(to == address(usdc), "Only approvals to Uniswap Permit2 allowed"); //TODO iterate over allowed tokens
 //        require(to == permit2, "Only approvals to Uniswap Permit2 allowed");
     }
 
