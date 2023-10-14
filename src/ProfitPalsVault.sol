@@ -26,10 +26,7 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
         IERC20[] memory tokens,
         uint256 operatorFee_,
         string memory name_,
-        string memory symbol_,
-
-        address safeProxyFactory,
-        address safeLogicSingleton
+        string memory symbol_
     )
     ERC4626(anchorCurrency_) ERC20(name_, symbol_){
         //TODO init safe account
@@ -50,11 +47,6 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
                 address(0),
                 0,
                 payable(0))
-        );
-        GnosisSafeProxyFactory(safeProxyFactory).createProxyWithNonce(
-            safeLogicSingleton,
-            safeAccountSetupData,
-            1234567
         );
     }
 

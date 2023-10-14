@@ -64,7 +64,7 @@ contract SetupSafeGuard is Test {
 //    )
 
     function test_deploySafeAndAddGuard() public {
-        UniswapOnlyGuard guard = new UniswapOnlyGuard(UNISWAP_PERMIT2_POLYGON);
+        UniswapOnlyGuard guard = new UniswapOnlyGuard(UNISWAP_PERMIT2_POLYGON, new IERC20[](0));
         // GuardManager.setGuard(address guard)
         bytes memory setGuardCallData = abi.encodeCall(
             GuardManager.setGuard,

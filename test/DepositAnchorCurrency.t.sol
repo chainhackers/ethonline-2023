@@ -27,10 +27,7 @@ contract DepositAnchorCurrencyTest is Test {
             tokens,
             2000,
 
-            "testUSDCVault", "tUSDCv",
-
-            SAFE_PROXY_FACTORY_130_POLYGON,
-            SAFE_LOGIC_SINGLETON_POLYGON
+            "testUSDCVault", "tUSDCv"
         );
 
         vm.startPrank(USDC_BIG_HOLDER);
