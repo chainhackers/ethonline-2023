@@ -29,9 +29,7 @@ contract ProfitPalsVaultDeploy is Script {
             allowedTokens,
             10,
             "TestVault",
-            "testPPVault",
-            SAFE_LOGIC_SINGLETON,
-            SAFE_PROXY_FACTORY
+            "testPPVault"
         );
 
         vm.stopBroadcast();
