@@ -1,0 +1,83 @@
+.input__wrapper {
+  display: block;
+  position: relative;
+}
+
+.input__box.with_icon {
+  padding: 20px 16px 20px 52px;
+}
+
+.input__box {
+  position: relative;
+  transition: background-color 0.2s ease-in-out;
+  background: var(--el-bg);
+  border-radius: var(--border-radius);
+  border: 1px solid #43474E;
+  width:100%;
+  height: 64px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 23px;
+    top: 50%;
+    margin-top: -2px;
+    pointer-events: none;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 5px;
+    height: 0;
+    width: 0;
+    border-top-color: #C7C6CA;
+    margin-left: -5px;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background-color: #374B3E;
+    transition: background-color 0.2s ease-in-out;
+  }
+}
+.input{
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.25px;
+  color: var(--neon-silver);
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.not_empty {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.272;
+    text-transform: uppercase;
+    color: #FFF;
+  }
+}
+
+.input__icon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  img {
+    object-fit: contain;
+    object-position: center;
+  }
+}
