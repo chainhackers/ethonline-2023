@@ -2,7 +2,6 @@ import { TablePropsI } from './TableProps.ts';
 import styles from './Table.module.scss';
 import { FC } from 'react';
 import { DateCell } from 'Components';
-import { Pagination } from 'Components';
 
 export const Table: FC<TablePropsI> = () => {
   const pools = [
@@ -49,27 +48,6 @@ export const Table: FC<TablePropsI> = () => {
       profit: '+10% $3460',
     },
   ];
-
-  // const tableRowMap = {
-  //   date: { title: 'Date', component: 'DateCell' },
-  //   operatorFee: { title: 'Operator fee', component: 'some tsx' },
-  //   total: { title: 'Total', component: 'DateCell' },
-  //   profit: { title: 'Profit', component: 'some tsx' },
-  // };
-  //todo: combine tokens and anchorCurrency for Anchor currency / Tokens
-  // const combineTokens = (pools: any) => {
-  //   const result = pools.map((pool: any) => {
-  //     return (pool = {
-  //       ...pool,
-  //       allTokens: { anchorCurrency: pool.anchorCurrency, tokens: pool.tokens },
-  //     });
-  //   });
-  //   setPools(result);
-  // };
-  // useEffect(() => {
-  //   combineTokens(pools);
-  // }, [pools]);
-
   return (
     <div className={styles.tableContainer}>
       <table border={1}>
@@ -80,11 +58,6 @@ export const Table: FC<TablePropsI> = () => {
             <th className={styles.right}>Total</th>
             <th className={styles.right}>Profit</th>
           </tr>
-          {/* <tr>
-            {Object.entries(tableRowMap).map(([key, value]) => (
-              <th key={key}>{value.title}</th>
-            ))}
-          </tr> */}
         </thead>
         <tbody>
           {pools.map((pool) => (
