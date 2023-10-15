@@ -1,0 +1,66 @@
+.button {
+  position: relative;
+  min-height: 36px;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #fff;
+  background-color: #BF0021;
+  font-size: 14px;
+  line-height: 1.428;
+  font-weight: 400;
+  width: auto;
+  cursor: pointer;
+
+  &::after {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    display: block;
+    z-index: 2;
+    border-radius: 8px;
+    transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+
+  &:hover:not([disabled])::after {
+    opacity: 1;
+    visibility: visible;
+    background-color: rgba(var(--disabled-bg-rgb), 0.08);
+    transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+
+  &:active:not([disabled])::after {
+    opacity: 1;
+    visibility: visible;
+    background-color: rgba(var(--disabled-bg-rgb), 0.16);
+  }
+
+  &:active:not([disabled]) &__inner {
+    color: rgba(255, 255, 255, 0.38);
+    opacity: 0.38;
+    z-index: 3;
+  }
+
+  &:disabled {
+    cursor: auto;
+    background-color: rgba(var(--disabled-bg-rgb), 0.12);
+  }
+
+  &:disabled &__inner {
+    color: var(--neon-silver);
+    opacity: 0.38;
+    z-index: 3;
+  }
+
+  &.styles_inherit {
+    width: inherit;
+    height: inherit;
+    min-height: inherit;
+    border-radius: inherit;
+  }
+}

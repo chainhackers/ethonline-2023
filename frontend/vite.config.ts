@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   build: {
     target: 'es2020',
+    outDir: 'dist',
+    assetsDir: 'assets',
   },
   plugins: [react()],
 });

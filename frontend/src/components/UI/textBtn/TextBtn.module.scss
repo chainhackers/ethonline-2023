@@ -1,0 +1,35 @@
+.button {
+  background-color: rgba(208, 188, 255, 0.08);
+  position: relative;
+  min-height: 44px;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 16px 10px 12px;
+  color: var(--accent-color);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
+  width: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0 8px;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover:not([disabled]) {
+    background-color: rgba(208, 188, 255, 0.12);
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  &:disabled {
+    cursor: auto;
+    background-color: rgba(var(--main-bg));
+    color: rgba(var(--neon-silver-rgb), 0.38);
+  }
+
+  &_icon {
+    path {
+      fill: rgba(var(--neon-silver-rgb), 0.38);
+    }
+  }
+}
