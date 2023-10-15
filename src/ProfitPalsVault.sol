@@ -55,4 +55,8 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
     function unpause() external {
 
     }
+
+    function allowedTokensCount() external view override returns (uint256) {
+        return allowedTokens.length;
+    }
 }

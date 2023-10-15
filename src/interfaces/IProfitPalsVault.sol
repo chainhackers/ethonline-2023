@@ -13,6 +13,8 @@ interface IProfitPalsVault is IERC4626 {
 
     function allowedTokens(uint256 index) external view returns (IERC20);
 
+    function allowedTokensCount() external view returns (uint256);
+
     function deposit(uint256 amount) external;
 
     function withdraw(uint256 amount) external;
