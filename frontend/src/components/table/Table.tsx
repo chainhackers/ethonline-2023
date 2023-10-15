@@ -75,10 +75,10 @@ export const Table: FC<TablePropsI> = () => {
       <table border={1}>
         <thead>
           <tr>
-            <td>Date</td>
-            <td className={styles.right}>Operator Fee</td>
-            <td className={styles.right}>Total</td>
-            <td className={styles.right}>Profit</td>
+            <th>Date</th>
+            <th className={styles.right}>Operator Fee</th>
+            <th className={styles.right}>Total</th>
+            <th className={styles.right}>Profit</th>
           </tr>
           {/* <tr>
             {Object.entries(tableRowMap).map(([key, value]) => (
@@ -99,9 +99,6 @@ export const Table: FC<TablePropsI> = () => {
           ))}
         </tbody>
       </table>
-      <div className={styles.tableFooter}>
-        <Pagination />
-      </div>
     </div>
   );
 };

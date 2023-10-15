@@ -45,19 +45,21 @@
       }
     }
     tbody {
-      tr {
+      tr:not(:last-child) {
         border-bottom: 1px solid #43474e;
       }
     }
 
     th {
       border: none;
-      padding: 0 8px 22px;
+      padding: 22px 8px 22px;
       text-align: left;
+      @include dimmedText;
     }
     td {
       border: none;
       padding: 22px 8px;
+      @include dimmedText;
     }
 
     .center {
