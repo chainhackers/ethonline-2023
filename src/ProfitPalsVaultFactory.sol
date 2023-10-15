@@ -72,6 +72,8 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory {
         );
         GnosisSafeL2 safe = GnosisSafeL2(payable(address(proxy)));
 
+        emit ProfitPalsVaultCreated(vault, anchorCurrency, tokens, operatorFee, name, symbol);
+
         return vault;
     }
 }
