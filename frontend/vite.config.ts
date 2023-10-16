@@ -10,7 +10,7 @@ export default defineConfig({
     assetsDir: 'assets',
   },
 
-  base: './',
+  // base: './',
   resolve: {
     alias: {
       Components: path.resolve(__dirname, './src/components'),
