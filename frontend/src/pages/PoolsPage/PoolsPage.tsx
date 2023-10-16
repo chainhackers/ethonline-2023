@@ -1,50 +1,58 @@
 import { PoolsPagePropsI } from './PoolsPageProps.ts';
 import styles from './PoolsPage.module.scss';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Header, Table } from 'Components';
 import { useContractRead } from 'wagmi';
 import { abi } from '../../data/abi.ts';
-// import { publicClientViem } from 'src/wagmiConfig.ts';
-const contract = '0xCa9c4a7949e6f9dc8343b565E34C493E4970c1AB';
+import { publicClientViem } from '../../wagmiConfig.ts';
 
+export type TPool = {
+  allowedTokens: string;
+  anchorCurrency: string;
+  operatorFee: number;
+};
 export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
-  const { data, isSuccess } = useContractRead({
+  const contract = '0xCa9c4a7949e6f9dc8343b565E34C493E4970c1AB';
+
+  useEffect(() => {
+    getPools();
+  }, []);
+
+  const wagmiContract = {
     address: contract,
     abi: abi,
-    functionName: 'name',
-    watch: false,
-  });
-  useEffect(() => {
-    if (isSuccess) {
-      console.log(data);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  } as const;
 
-  // const wagmiContract = {
-  //   address: contract,
-  //   abi: abi,
-  //   functionName: 'name',
-  // } as const;
+  const [tableData, setTableData] = useState<TPool[] | null>(null);
 
-  // const getPools = async () => {
-  //   const results = await publicClientViem.multicall({
-  //     contracts: [
-  //       {
-  //         ...wagmiContract,
-  //       },
-  // {
-  //   ...wagmiContract,
-  //   functionName: 'ownerOf',
-  //   args: [69420n],
-  // },
-  // {
-  //   ...wagmiContract,
-  //   functionName: 'mint',
-  // },
-  //     ],
-  //   });
-  // };
+  const getPools = async () => {
+    const results = await publicClientViem.multicall({
+      contracts: [
+        {
+          ...wagmiContract,
+          functionName: 'allowedTokens',
+          args: [0],
+        },
+        {
+          ...wagmiContract,
+          functionName: 'anchorCurrency',
+        },
+        {
+          ...wagmiContract,
+          functionName: 'operatorFee',
+        },
+      ],
+    });
+    const pool = {
+      allowedTokens: results[0].result,
+      anchorCurrency: results[1].result,
+      operatorFee: results[2].result,
+    };
+    setTableData([pool]);
+    console.log(pool);
+
+    // return [pool];
+  };
 
   return (
     <>
@@ -52,7 +60,7 @@ export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
       <div className={styles.poolPageContainer}>
         <main className={styles.poolsPage}>
           <h1>{poolsType}</h1>
-          <Table />
+          {tableData && <Table tableData={tableData!} />}
         </main>
       </div>
     </>
