@@ -8,10 +8,6 @@ const router = createBrowserRouter([
     path: '/',
     element: <PoolsPage poolsType={'All Pools'} />,
   },
-  {
-    path: '/available-pools',
-    element: <PoolsPage poolsType={'All Pools'} />,
-  },
 ]);
 
 function App() {
