@@ -1,6 +1,11 @@
 export const PROJECT_ID = 'f5f4ef3634a6aa0af5a1d5516608377a';
-
 export const ANIMATION_MS = 200;
+export const ABI = {
+  createVault: {
+    name: 'createVault',
+    address: 'B27c82830d7236A5d9baD6aA724845423f830C67',
+  },
+};
 
 export const TOKENS = {
   ETH: {
