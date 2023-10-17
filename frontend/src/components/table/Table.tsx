@@ -1,6 +1,7 @@
 import { TablePropsI } from './TableProps.ts';
 import styles from './Table.module.scss';
 import { FC } from 'react';
+// import axios from 'axios';
 // import { DateCell } from 'Components';
 // import { TPool } from 'src/pages/index.ts';
 
@@ -18,11 +19,11 @@ export const Table: FC<TablePropsI> = ({ tableData }) => {
         </thead>
         <tbody>
           {tableData.map((pool) => (
-            <tr key={pool.allowedTokens}>
-              {/* <td>
+            <tr key={pool.address}>
+              {/* <td> todo
                 <DateCell cellValue={pool.date} />
               </td> */}
-              <td className={styles.right}>{String(pool.operatorFee)}</td>
+              <td className={styles.right}>{String(pool.operatorFee) + '%'}</td>
               <td className={styles.right}>{String(pool.anchorCurrency)}</td>
               <td className={styles.right}>{String(pool.allowedTokens)}</td>
             </tr>
