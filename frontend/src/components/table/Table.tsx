@@ -12,9 +12,9 @@ export const Table: FC<TablePropsI> = ({ tableData }) => {
         <thead>
           <tr>
             {/* <th>Date</th> */}
-            <th className={styles.right}>Operator Fee</th>
-            <th className={styles.right}>anchorCurrency</th>
-            <th className={styles.right}>allowedTokens</th>
+            <th className={styles.right}>Operator fee</th>
+            <th className={styles.right}>anchor currency</th>
+            <th className={styles.right}>Allowed Tokens</th>
           </tr>
         </thead>
         <tbody>

@@ -17,15 +17,15 @@ export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
   const tableData: TPool[] = [
     {
       address: '0',
-      allowedTokens: ['12312', '1231231', 'asdas'],
-      anchorCurrency: 'sdfsdfsd',
+      allowedTokens: ['0x606279b2c388ed37d0e5e52ea0d75eb2b539a57e'],
+      anchorCurrency: '0x606279b2c388ed37d0e5e52ea0d75eb2b539a57e',
       operatorFee: 10,
     },
     {
       address: '1',
-      allowedTokens: ['12312', '1231231', 'asdas'],
-      anchorCurrency: 'sdfsdfsd',
-      operatorFee: 10,
+      allowedTokens: ['0x606279b2c388ed37d0e5e52ea0d75eb2b539a57e'],
+      anchorCurrency: '0x606279b2c388ed37d0e5e52ea0d75eb2b539a57e',
+      operatorFee: 15,
     },
   ];
 
