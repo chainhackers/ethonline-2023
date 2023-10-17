@@ -8,9 +8,12 @@ import {GnosisSafeProxyFactory} from "@safe-contracts/proxies/GnosisSafeProxyFac
 import {GnosisSafeProxy} from "@safe-contracts/proxies/GnosisSafeProxy.sol";
 import "./UniswapOnlyGuard.sol";
 import "@safe-contracts/GnosisSafeL2.sol";
+import "@safe-contracts/common/Enum.sol";
 import "@safe-contracts/examples/guards/ReentrancyTransactionGuard.sol";
+import "@safe-contracts/interfaces/ISignatureValidator.sol";
 
-contract ProfitPalsVaultFactory is IProfitPalsVaultFactory {
+
+contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator {
     address public immutable safeLogicSingleton;
     address public immutable safeProxyFactory;
 
@@ -46,15 +49,15 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory {
         );
 
 
-        address[] memory owners = new address[](2);
+        address[] memory owners = new address[](3);
         owners[0] = address(vault);
         owners[1] = tx.origin; //TODO think about this
-
+        owners[2] = address(this);
 
         //        UniswapOnlyGuard guard = new UniswapOnlyGuard(UNISWAP_PERMIT2_POLYGON, tokens);
         //        ReentrancyTransactionGuard guard = new ReentrancyTransactionGuard();
 
-    bytes memory safeInitializerData = abi.encodeCall(
+        bytes memory safeInitializerData = abi.encodeCall(
             GnosisSafe.setup,
             (owners,
                 1,
@@ -72,8 +75,41 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory {
         );
         GnosisSafeL2 safe = GnosisSafeL2(payable(address(proxy)));
 
+        bytes memory setGuardData = abi.encodeCall(
+            GuardManager.setGuard,
+            address(safe)
+        );
+
+//        https://docs.safe.global/safe-smart-account/signatures#contract-signature-eip-1271
+//        {32-bytes signature verifier}{32-bytes data position}{1-byte signature type}
+//        {32-bytes signature length}{bytes signature data}
+        bytes memory signature = bytes.concat(
+            abi.encode(address(this)),
+            abi.encode(uint8(65)),
+            bytes1(0),    //static part ends here
+            abi.encode(uint8(1)),   //signature length
+            bytes1(0)     //signature data
+        );
+
+        safe.execTransaction(
+            address(safe), //to
+            0, //value
+            setGuardData,
+            Enum.Operation.Call,
+            0, // safeTxGas
+            0, // baseGas
+            0, // gasPrice
+            address(0), // gasToken
+            payable(address(this)), // refundReceiver
+            signature
+        );
+
         emit ProfitPalsVaultCreated(vault, anchorCurrency, tokens, operatorFee, name, symbol);
 
         return vault;
+    }
+
+    function isValidSignature(bytes memory _data, bytes memory _signature) public view override returns (bytes4){
+        return bytes4(EIP1271_MAGIC_VALUE); //TODO
     }
 }
