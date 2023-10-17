@@ -6,8 +6,6 @@ export const abi = [
       { internalType: 'uint256', name: 'operatorFee_', type: 'uint256' },
       { internalType: 'string', name: 'name_', type: 'string' },
       { internalType: 'string', name: 'symbol_', type: 'string' },
-      { internalType: 'address', name: 'safeProxyFactory', type: 'address' },
-      { internalType: 'address', name: 'safeLogicSingleton', type: 'address' },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -127,19 +125,6 @@ export const abi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: true, internalType: 'address', name: 'vault', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'anchorCurrency', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'operator', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'operatorFee', type: 'uint256' },
-      { indexed: false, internalType: 'string', name: 'name', type: 'string' },
-      { indexed: false, internalType: 'string', name: 'symbol', type: 'string' },
-    ],
-    name: 'ProfitPalsVaultCreated',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
       { indexed: true, internalType: 'address', name: 'from', type: 'address' },
       { indexed: true, internalType: 'address', name: 'to', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'value', type: 'uint256' },
@@ -173,6 +158,20 @@ export const abi = [
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'allowedTokens',
     outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'allowedTokensCount',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'allowedTokensList',
+    outputs: [{ internalType: 'contract IERC20[]', name: '', type: 'address[]' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -342,13 +341,6 @@ export const abi = [
     name: 'redeem',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'safeAccount',
-    outputs: [{ internalType: 'contract GnosisSafeProxy', name: '', type: 'address' }],
-    stateMutability: 'view',
     type: 'function',
   },
   {
