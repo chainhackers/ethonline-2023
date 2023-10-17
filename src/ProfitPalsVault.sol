@@ -3,7 +3,8 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/IProfitPalsVault.sol";
 import "@openzeppelin/token/ERC20/extensions/ERC4626.sol";
-import "@safe-contracts/GnosisSafe.sol";
+import "@safe-contracts/GnosisSafeL2.sol";
+import "@safe-contracts/base/GuardManager.sol";
 import "@safe-contracts/proxies/GnosisSafeProxyFactory.sol";
 
 /**
@@ -54,6 +55,10 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
 
     function unpause() external {
 
+    }
+
+    function allowedTokensList() external view override returns (IERC20[] memory) {
+        return allowedTokens;
     }
 
     function allowedTokensCount() external view override returns (uint256) {
