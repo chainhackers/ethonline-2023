@@ -1,58 +1,80 @@
 import { PoolsPagePropsI } from './PoolsPageProps.ts';
 import styles from './PoolsPage.module.scss';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { Header, Table } from 'Components';
-import { useContractRead } from 'wagmi';
-import { abi } from '../../data/abi.ts';
-import { publicClientViem } from '../../wagmiConfig.ts';
+// import { abi } from '../../data/abi.ts';
+// import { publicClientViem } from '../../wagmiConfig.ts';
+// import { useContractRead } from 'wagmi';
 
 export type TPool = {
-  allowedTokens: string;
+  address: string;
+  allowedTokens: string[];
   anchorCurrency: string;
   operatorFee: number;
 };
+
 export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
-  const contract = '0xCa9c4a7949e6f9dc8343b565E34C493E4970c1AB';
+  const tableData: TPool[] = [
+    {
+      address: '0',
+      allowedTokens: ['12312', '1231231', 'asdas'],
+      anchorCurrency: 'sdfsdfsd',
+      operatorFee: 10,
+    },
+    {
+      address: '1',
+      allowedTokens: ['12312', '1231231', 'asdas'],
+      anchorCurrency: 'sdfsdfsd',
+      operatorFee: 10,
+    },
+  ];
 
-  useEffect(() => {
-    getPools();
-  }, []);
+  //todo: improve the acquisition of contract data
+  //   const contract = '0x606279b2c388ed37d0e5e52ea0d75eb2b539a57e';
+  //   const contractsList = [contract];
 
-  const wagmiContract = {
-    address: contract,
-    abi: abi,
-  } as const;
+  // useEffect(() => {
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  const [tableData, setTableData] = useState<TPool[] | null>(null);
+  // const abi2 = [
+  //   'function allowedTokensList() view returns (IERC20[] memory)',
+  //   'function anchorCurrency() view returns (IERC20)',
+  //   'function operatorFee() view returns (uint256);',
+  // ];
+  // const wagmiContract = {
+  //   address: contract,
+  //   abi: abi2,
+  // } as const;
 
-  const getPools = async () => {
-    const results = await publicClientViem.multicall({
-      contracts: [
-        {
-          ...wagmiContract,
-          functionName: 'allowedTokens',
-          args: [0],
-        },
-        {
-          ...wagmiContract,
-          functionName: 'anchorCurrency',
-        },
-        {
-          ...wagmiContract,
-          functionName: 'operatorFee',
-        },
-      ],
-    });
-    const pool = {
-      allowedTokens: results[0].result,
-      anchorCurrency: results[1].result,
-      operatorFee: results[2].result,
-    };
-    setTableData([pool]);
-    console.log(pool);
+  // const [tableData, setTableData] = useState<TPool[] | null>(null);
 
-    // return [pool];
-  };
+  // const getAllowedTokens = async () => {
+  //   const { data } = useContractRead({
+  //     address: contract,
+  //     abi: abi2,
+  //     functionName: 'allowedTokensList',
+  //   });
+  //   // return result[0].address;
+  // };
+
+  // const getAnchorCurrency = async () => {
+  //   const result = contractsList.map((contract: string) => ({
+  //     address: contract,
+  //     abi: abi2,
+  //     functionName: 'anchorCurrency',
+  //   }));
+  //   return result[0].address;
+  // };
+
+  // const getOperatorFee = async () => {
+  //   const result = contractsList.map((contract: string) => ({
+  //     address: contract,
+  //     abi: abi2,
+  //     functionName: 'operatorFee',
+  //   }));
+  // };
+  // const getPools = async () => {};
 
   return (
     <>
@@ -60,7 +82,7 @@ export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
       <div className={styles.poolPageContainer}>
         <main className={styles.poolsPage}>
           <h1>{poolsType}</h1>
-          {tableData && <Table tableData={tableData!} />}
+          {tableData && <Table tableData={tableData} />}
         </main>
       </div>
     </>
