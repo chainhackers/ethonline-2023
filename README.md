@@ -22,12 +22,6 @@ Our ETHOnline2023 focus: integration with Uniswap and harnessing Safe smart wall
 
 Monorepo setup: smart contracts in root, frontend in its folder. We integrate Foundry/Forge with GitHub Actions for streamlined CI/CD.
 
-## Test in Polygon Mainnet fork
-```shell
-source .env
-forge test --fork-url $POLYGON_RPC_URL
-```
-
 ## Links
 - **ChainHackers**: [https://chainhackers.xyz/](https://chainhackers.xyz/)
 - **ProfitPals**: [https://profitpals.chainhackers.xyz/](https://profitpals.chainhackers.xyz/)
