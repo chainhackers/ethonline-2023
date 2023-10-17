@@ -8,7 +8,6 @@ interface IProfitPalsVaultFactory {
     event ProfitPalsVaultCreated(
         IProfitPalsVault indexed vault,
         IERC20 indexed anchorCurrency,
-        IERC20[] tokens,
         uint256 operatorFee,
         string name,
         string symbol

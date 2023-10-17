@@ -6,17 +6,19 @@ import "@openzeppelin/token/ERC20/extensions/ERC4626.sol";
 import "@safe-contracts/GnosisSafeL2.sol";
 import "@safe-contracts/base/GuardManager.sol";
 import "@safe-contracts/proxies/GnosisSafeProxyFactory.sol";
+import "@openzeppelin/proxy/utils/Initializable.sol";
 
 /**
  * @title ProfitPalsVault
  * @dev This contract acts as the primary vault for the ProfitPals project, holding and managing all assets.
  * The main asset, or anchor currency, that is managed within this vault can be any ERC20 token.
  */
-contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
+contract ProfitPalsVault is IProfitPalsVault, ERC4626, Initializable {
     IERC20 public immutable anchorCurrency;
     address public immutable operator;
     uint256 public immutable operatorFee;
     IERC20[] public allowedTokens;
+    GnosisSafeL2 public safe;
     /**
      * @param anchorCurrency_ - The main or anchor ERC20 token that the vault will manage.
      * @param name_ - Name of the shares token
@@ -34,6 +36,12 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626 {
         anchorCurrency = anchorCurrency_;
         operatorFee = operatorFee_;
         allowedTokens = tokens;
+    }
+
+    function initialize(
+        GnosisSafeL2 safe_
+    ) public initializer {
+
     }
 
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {

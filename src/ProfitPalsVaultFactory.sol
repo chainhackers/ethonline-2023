@@ -7,6 +7,7 @@ import "./Constants.sol";
 import {GnosisSafeProxyFactory} from "@safe-contracts/proxies/GnosisSafeProxyFactory.sol";
 import {GnosisSafeProxy} from "@safe-contracts/proxies/GnosisSafeProxy.sol";
 import "./UniswapOnlyGuard.sol";
+import "./SimpleGuard.sol";
 import "@safe-contracts/GnosisSafeL2.sol";
 import "@safe-contracts/common/Enum.sol";
 import "@safe-contracts/examples/guards/ReentrancyTransactionGuard.sol";
@@ -54,7 +55,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
         owners[1] = tx.origin; //TODO think about this
         owners[2] = address(this);
 
-        //        UniswapOnlyGuard guard = new UniswapOnlyGuard(UNISWAP_PERMIT2_POLYGON, tokens);
+        SimpleGuard guard = new SimpleGuard(UNISWAP_PERMIT2_POLYGON, vault);
         //        ReentrancyTransactionGuard guard = new ReentrancyTransactionGuard();
 
         bytes memory safeInitializerData = abi.encodeCall(
@@ -75,9 +76,11 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
         );
         GnosisSafeL2 safe = GnosisSafeL2(payable(address(proxy)));
 
+        vault.initialize(safe);
+
         bytes memory setGuardData = abi.encodeCall(
             GuardManager.setGuard,
-            address(safe)
+            address(guard)
         );
 
 //        https://docs.safe.global/safe-smart-account/signatures#contract-signature-eip-1271
@@ -104,7 +107,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
             signature
         );
 
-        emit ProfitPalsVaultCreated(vault, anchorCurrency, tokens, operatorFee, name, symbol);
+        emit ProfitPalsVaultCreated(vault, anchorCurrency, operatorFee, name, symbol);
 
         return vault;
     }
