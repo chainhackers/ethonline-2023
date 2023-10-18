@@ -3,7 +3,7 @@ export const ANIMATION_MS = 200;
 export const ABI = {
   createVault: {
     name: 'createVault',
-    address: '6DBa88f2ad6C2518EA7C75B8c6E573d22691c402',
+    address: 'CFE179E40FA25743906821869AbE99Fd859e2ac7',
   },
 };
 
@@ -26,11 +26,39 @@ export const TOKENS = {
     decimals: 6,
     iconPath: 'assets/img/tokens/usdc.svg',
   },
-  ChainLink: {
-    fullName: 'ChainLink',
+  ChainLinkToken: {
+    fullName: 'ChainLinkToken',
     name: 'LINK',
     address: '0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39',
     decimals: 18,
     iconPath: 'assets/img/tokens/link.svg',
+  },
+  WrappedEther: {
+    fullName: 'WrappedEther',
+    name: 'WETH',
+    address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+    decimals: 18,
+    iconPath: 'assets/img/tokens/weth.svg',
+  },
+  TetherUSDt: {
+    fullName: '(PoS)TetherUSD',
+    name: 'USDT',
+    address: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+    decimals: 6,
+    iconPath: 'assets/img/tokens/usdt.svg',
+  },
+  DaiStablecoin: {
+    fullName: '(PoS)DaiStablecoin',
+    name: 'DAI',
+    address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+    decimals: 18,
+    iconPath: 'assets/img/tokens/dai.svg',
+  },
+  Aave: {
+    fullName: 'Aave(PoS)',
+    name: 'AAVE',
+    address: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B',
+    decimals: 18,
+    iconPath: 'assets/img/tokens/aave.svg',
   },
 };

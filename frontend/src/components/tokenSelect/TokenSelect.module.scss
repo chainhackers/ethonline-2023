@@ -1,18 +1,5 @@
 .token_select {
   width: 420px;
-  max-height: 400px;
-  overflow-y: scroll;
-  scrollbar-color: rgba(255,255,255,0) rgba(255,255,255,0.2); /*Mozilla*/
-  scrollbar-width: thin; /*Mozilla*/
-
-  &::-webkit-scrollbar {
-      width: 8px;
-      background: transparent;
-  }
-  &::-webkit-scrollbar-thumb{
-      background-color: rgba(255,255,255,0.2);
-      border-radius: 100px;
-  }
 
   &__default {
     .token_select__item {
@@ -28,6 +15,19 @@
 
   &__items {
     margin-top: 20px;
+    max-height: 300px;
+    overflow-y: scroll;
+    scrollbar-color: rgba(255,255,255,0.2); /*Mozilla*/
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: rgba(255,255,255,0.2);
+        border-radius: 100px;
+    }
   }
 
   &__label,
