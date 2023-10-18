@@ -7,46 +7,29 @@ export const ABI = {
   },
 };
 
+export const ROUTES = {
+  assetManagement: '/asset-management',
+};
+
 export const TOKENS = {
-  ETH: {
-    fullName: 'Ethereum',
-    name: 'ETH',
-    address: '0x9d6010265321a3a409ae7417fda34afc06eb4e76',
-    decimals: 18,
-    iconPath: 'assets/img/tokens/Ethereum.svg',
-  },
   MATIC: {
     fullName: 'MATIC',
     name: 'MATIC',
-    address: '0x0000000000000000000000000000000000001010',
+    address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
     decimals: 18,
     iconPath: 'assets/img/tokens/polygon-matic-logo.svg',
   },
   USDC: {
-    fullName: 'USDC',
+    fullName: 'USDCoin',
     name: 'USDC',
     address: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
     decimals: 6,
     iconPath: 'assets/img/tokens/usdc.svg',
   },
-  Bitbay: {
-    fullName: 'Bitbay',
-    name: 'Bay',
-    address: '0xf98418F37fa1Ab474a226AFa15231BF534e94771',
-    decimals: 18,
-    iconPath: 'assets/img/tokens/bay.svg',
-  },
-  BNB: {
-    fullName: 'BNB',
-    name: 'BNB',
-    address: '0x3BA4c387f786bFEE076A58914F5Bd38d668B42c3',
-    decimals: 18,
-    iconPath: 'assets/img/tokens/bnb.svg',
-  },
   ChainLink: {
     fullName: 'ChainLink',
     name: 'LINK',
-    address: '0xb0897686c545045aFc77CF20eC7A532E3120E0F1',
+    address: '0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39',
     decimals: 18,
     iconPath: 'assets/img/tokens/link.svg',
   },
