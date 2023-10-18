@@ -29,11 +29,25 @@ export const TOKENS = {
     decimals: 6,
     iconPath: 'assets/img/tokens/usdc.svg',
   },
-  Bitcoin: {
+  Bitbay: {
     fullName: 'Bitbay',
     name: 'Bay',
     address: '0xf98418F37fa1Ab474a226AFa15231BF534e94771',
     decimals: 18,
     iconPath: 'assets/img/tokens/bay.svg',
+  },
+  BNB: {
+    fullName: 'BNB',
+    name: 'BNB',
+    address: '0x3BA4c387f786bFEE076A58914F5Bd38d668B42c3',
+    decimals: 18,
+    iconPath: 'assets/img/tokens/bnb.svg',
+  },
+  ChainLink: {
+    fullName: 'ChainLink',
+    name: 'LINK',
+    address: '0xb0897686c545045aFc77CF20eC7A532E3120E0F1',
+    decimals: 18,
+    iconPath: 'assets/img/tokens/link.svg',
   },
 };
