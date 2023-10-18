@@ -1,0 +1,22 @@
+.poolPageContainer {
+  display: flex;
+  padding: 0 122px;
+
+  .poolsPage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+
+    h1 {
+      margin-top: 32px;
+      margin-bottom: 24px;
+      color: #c7c6ca;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 24px;
+      letter-spacing: 0.25px;
+    }
+  }
+}

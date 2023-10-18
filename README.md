@@ -36,12 +36,6 @@ Update submodules when you need to
 git submodule update --init --recursive
 ```
 
-## Test in Polygon Mainnet fork
-```shell
-source .env
-forge test --fork-url $POLYGON_RPC_URL
-```
-
 ## Links
 - **ChainHackers**: [https://chainhackers.xyz/](https://chainhackers.xyz/)
 - **ProfitPals**: [https://profitpals.chainhackers.xyz/](https://profitpals.chainhackers.xyz/)

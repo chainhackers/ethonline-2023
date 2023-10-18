@@ -1,0 +1,23 @@
+.create_pool {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__box {
+    max-width: 920px;
+    width: 100%;
+    padding: 24px;
+    margin-top: 32px;
+    background-color: #1B1B1F;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+  }
+
+  &__form {
+    margin-top: 32px;
+    gap: 32px 0;
+    display: flex;
+    flex-direction: column;
+  }
+}

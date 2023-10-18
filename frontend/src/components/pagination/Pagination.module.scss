@@ -1,0 +1,29 @@
+.pagination {
+  display: flex;
+  gap: 24px;
+  padding: 16px 20px;
+  justify-content: flex-end;
+  align-items: center;
+  .rowsCount {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .pages {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    span {
+      font-size: 16px;
+    }
+  }
+  .icons {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+
+    .rotateRight {
+      transform: rotate(180deg);
+    }
+  }
+}

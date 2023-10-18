@@ -1,0 +1,24 @@
+.versionInfoBox {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  color: #ffffff;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 10px;
+  max-width: 250px;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.versionInfoItem {
+  word-break: break-all;
+  margin-top: 10px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.versionInfoName {
+  padding-right: 5px;
+}

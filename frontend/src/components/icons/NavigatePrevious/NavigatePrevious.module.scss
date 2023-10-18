@@ -1,0 +1,8 @@
+.icon {
+  cursor: pointer;
+  &:hover {
+    path {
+      fill: #808080;
+    }
+  }
+}

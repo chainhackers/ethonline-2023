@@ -1,0 +1,108 @@
+.overlayAnimEnter {
+  opacity: 0;
+}
+
+.overlayAnimEnterActive {
+  opacity: 1;
+  transition: opacity 200ms ease-in-out;
+}
+
+.overlayAnimExit {
+  opacity: 1;
+}
+
+.overlayAnimExitActive {
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+}
+
+.windowAnimEnter {
+  opacity: 0;
+}
+
+.windowAnimEnterActive {
+  transition: opacity 100ms ease-out 200ms;
+  opacity: 1;
+}
+
+.windowAnimExit {
+  opacity: 1;
+}
+
+.windowAnimExitActive {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.overlayBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 97;
+  background-color: rgba(15, 18, 29, 0.60);
+}
+
+.windowOverlay {
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 97;
+  cursor: pointer;
+  background: transparent;
+}
+
+.windowOverlayInner {
+  z-index: 98;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.window {
+  position: relative;
+  max-width: 100%;
+  height: auto;
+  background: var(--el-bg);
+  border-radius: var(--border-radius);
+  z-index: 99;
+  padding: 20px 16px;
+  cursor: auto;
+}
+
+.closeBtn {
+  width: 20px;
+  height: 20px;
+  right: 24px;
+  top: 20px;
+  cursor: pointer;
+  border: none;
+  display: block;
+  background: transparent;
+  position: absolute;
+}
+
+.closeBtn:focus {
+  background: transparent;
+}
+.closeBtn::before,
+.closeBtn::after {
+  transform: rotate(45deg);
+  position: absolute;
+  left: 50%;
+  top: 0;
+  content: '';
+  height: 100%;
+  width: 2px;
+  background-color: #ffffff;
+  border-radius: 50px;
+}
+.closeBtn::after {
+  transform: rotate(-45deg);
+}
