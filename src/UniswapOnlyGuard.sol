@@ -7,12 +7,16 @@ import "./Constants.sol";
 
 contract UniswapOnlyGuard is Guard {
     address public immutable permit2;
-    IERC20[] public allowedTokens;
-    IERC20 usdc = IERC20(USDC_POLYGON);
+    mapping(address => bool) allowedTokens;
 
-    constructor(address permit2_, IERC20[] memory allowedTokens_){
+    constructor(
+        address permit2_,
+        IERC20[] memory allowedTokens_
+    ){
         permit2 = permit2_;
-        allowedTokens = allowedTokens_;
+        for(int i = 0; i < allowedTokens_.length; i++){
+            allowedTokens[allowedTokens_[i]] = true;
+        }
     }
 
     // TODO not sure, experimenting, consider removing this

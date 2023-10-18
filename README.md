@@ -22,6 +22,16 @@ Our ETHOnline2023 focus: integration with Uniswap and harnessing Safe smart wall
 
 Monorepo setup: smart contracts in root, frontend in its folder. We integrate Foundry/Forge with GitHub Actions for streamlined CI/CD.
 
+### Clone/Checkout
+Clone with submodules
+```shell
+git clone --recurse-submodules git@github.com:chainhackers/ethonline-2023.git
+```
+Update submodules when you need to
+```shell
+git submodule update --init --recursive
+```
+
 ## Test in Polygon Mainnet fork
 ```shell
 source .env
