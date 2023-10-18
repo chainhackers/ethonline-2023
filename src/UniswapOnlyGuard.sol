@@ -23,6 +23,8 @@ contract UniswapOnlyGuard is Guard {
             allowedTokens[address(allowedTokens_[i])] = true;
         }
 
+        uniswapContracts[0xA65387F16B013cf2Af4605Ad8aA5ec25a2cbA3a2] = true; // sign message lib https://polygonscan.com/address/0xa65387f16b013cf2af4605ad8aa5ec25a2cba3a2#writeContract
+
         uniswapContracts[0x1F98431c8aD98523631AE4a59f267346ea31F984] = true;
         uniswapContracts[0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696] = true;
         uniswapContracts[0xC36442b4a4522E871399CD717aBDD847Ab11FE88] = true;
