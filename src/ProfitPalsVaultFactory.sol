@@ -55,7 +55,8 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
         owners[1] = tx.origin; //TODO think about this
         owners[2] = address(this);
 
-        SimpleGuard guard = new SimpleGuard(UNISWAP_PERMIT2_POLYGON, vault);
+        UniswapOnlyGuard guard = new UniswapOnlyGuard(tokens);
+        //        SimpleGuard guard = new SimpleGuard(UNISWAP_PERMIT2_POLYGON, vault);
         //        ReentrancyTransactionGuard guard = new ReentrancyTransactionGuard();
 
         bytes memory safeInitializerData = abi.encodeCall(

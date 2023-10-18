@@ -16,6 +16,7 @@ contract ProfitPalsVaultDeploy is Script {
 
         allowedTokens.push(IERC20(USDC_POLYGON));
         allowedTokens.push(IERC20(WBTC_POLYGON));
+        allowedTokens.push(IERC20(WETH_POLYGON));
 
         vm.startBroadcast(deployerPrivateKey);
 
@@ -28,7 +29,7 @@ contract ProfitPalsVaultDeploy is Script {
             IERC20(USDC_POLYGON),
             allowedTokens,
             100,
-            "PP_USD_BTC_VAULT",
+            "PP_USDC_WETH_WBTC_VAULT",
             "PPV"
         );
 

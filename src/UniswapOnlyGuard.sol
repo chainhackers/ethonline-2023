@@ -6,17 +6,29 @@ import "@openzeppelin/token/ERC20/IERC20.sol";
 import "./Constants.sol";
 
 contract UniswapOnlyGuard is Guard {
-    address public immutable permit2;
     mapping(address => bool) allowedTokens;
+    mapping(address => bool) uniswapContracts;
+// https://docs.uniswap.org/contracts/v3/reference/deployments
+// 0x1F98431c8aD98523631AE4a59f267346ea31F984
+// 0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696
+// 0xC36442b4a4522E871399CD717aBDD847Ab11FE88
+// 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45
+// 0x000000000022D473030F116dDEE9F6B43aC78BA3
+// 0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD
 
     constructor(
-        address permit2_,
         IERC20[] memory allowedTokens_
     ){
-        permit2 = permit2_;
-        for(int i = 0; i < allowedTokens_.length; i++){
-            allowedTokens[allowedTokens_[i]] = true;
+        for (uint i = 0; i < allowedTokens_.length; i++) {
+            allowedTokens[address(allowedTokens_[i])] = true;
         }
+
+        uniswapContracts[0x1F98431c8aD98523631AE4a59f267346ea31F984] = true;
+        uniswapContracts[0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696] = true;
+        uniswapContracts[0xC36442b4a4522E871399CD717aBDD847Ab11FE88] = true;
+        uniswapContracts[0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45] = true;
+        uniswapContracts[0x000000000022D473030F116dDEE9F6B43aC78BA3] = true;
+        uniswapContracts[0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD] = true;
     }
 
     // TODO not sure, experimenting, consider removing this
@@ -25,6 +37,7 @@ contract UniswapOnlyGuard is Guard {
         // We don't revert on fallback to avoid issues in case of a Safe upgrade
         // E.g. The expected check method might change and then the Safe would be locked.
     }
+
     function checkTransaction(
         address to,
         uint256 value,
@@ -38,11 +51,12 @@ contract UniswapOnlyGuard is Guard {
         bytes memory signatures,
         address msgSender
     ) external override {
-//        require(to == address(usdc), "Only approvals to Uniswap Permit2 allowed"); //TODO iterate over allowed tokens
-//        require(to == permit2, "Only approvals to Uniswap Permit2 allowed");
+        require(uniswapContracts[to] || allowedTokens[to], "Only approvals of allowed tokens to Uniswap and Uniswap contracts allowed"); //TODO iterate over allowed tokens
+        //TODO keep record of mint txs
+        //TODO keep record of burn ( decrease liquidity ) txs
     }
 
     function checkAfterExecution(bytes32 txHash, bool success) external override {
-        // Nothing to do
+        //TODO get minted position IDs
     }
 }
