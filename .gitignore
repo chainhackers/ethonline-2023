@@ -1,3 +1,5 @@
+.env
+
 # Logs
 logs
 *.log
@@ -34,6 +36,8 @@ out/
 
 # Docs
 docs/
+
+broadcast/
 
 # Dotenv file
 .env

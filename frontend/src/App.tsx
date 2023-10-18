@@ -1,22 +1,17 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { PoolsPage } from 'Pages';
+import './index.scss';
 import '@rainbow-me/rainbowkit/styles.css';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import VersionInfo from './components/versionInfo/VersionInfo';
-import CreatePool from './components/createPool/CreatePool';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <PoolsPage poolsType={'All Pools'} />,
+  },
+]);
 
 function App() {
-  const versionGitTag = import.meta.env.VITE_REACT_APP_GIT_TAG;
-  const gitDate = import.meta.env.VITE_REACT_APP_GIT_DATE;
-
-  console.log('VITE_REACT_APP_GIT_TAG - ', versionGitTag);
-  console.log('VITE_REACT_APP_GIT_DATE - ', gitDate);
-
-  return (
-    <div className='app'>
-      <ConnectButton />
-      <CreatePool />
-      {versionGitTag && gitDate && <VersionInfo version={versionGitTag} versionDate={gitDate} />}
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

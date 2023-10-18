@@ -1,16 +1,17 @@
 import { publicProvider } from 'wagmi/providers/public';
-import { configureChains, createConfig, mainnet } from 'wagmi';
+import { configureChains, createConfig } from 'wagmi';
 import { polygon } from '@wagmi/core/chains';
 import { getDefaultWallets } from '@rainbow-me/rainbowkit';
-import { arbitrum, base, optimism, zora } from 'viem/chains';
 import { PROJECT_ID } from './constants/constants';
+import { createPublicClient, http } from 'viem';
 
 console.log('walletConnect PROJECT_ID: ', PROJECT_ID);
 
-export const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, base, zora],
-  [publicProvider()]
-);
+export const { chains, publicClient } = configureChains([polygon], [publicProvider()]);
+export const publicClientViem = createPublicClient({
+  chain: polygon,
+  transport: http(),
+});
 
 const { connectors } = getDefaultWallets({
   appName: 'profitpals',

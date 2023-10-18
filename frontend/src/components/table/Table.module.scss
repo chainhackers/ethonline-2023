@@ -1,0 +1,80 @@
+@mixin dimmedText {
+  color: #c3c6cf;
+  font-family: Noto Sans;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.25px;
+}
+
+@mixin text {
+  color: #fff;
+  text-align: right;
+  font-family: Noto Sans;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.25px;
+}
+
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+  width: 100%;
+  border-radius: 16px;
+  background: #1b1b1f;
+  box-shadow:
+    0px 1px 3px 0px rgba(0, 0, 0, 0.3),
+    0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+
+    thead,
+    tbody {
+      padding: 24px;
+    }
+
+    thead {
+      tr {
+        border-bottom: 1px solid #a3cddc;
+      }
+    }
+    tbody {
+      tr:not(:last-child) {
+        border-bottom: 1px solid #43474e;
+      }
+    }
+
+    th {
+      border: none;
+      padding: 22px 8px 22px;
+      text-align: left;
+      @include dimmedText;
+    }
+    td {
+      border: none;
+      padding: 22px 8px;
+      @include dimmedText;
+    }
+
+    .center {
+      text-align: center;
+    }
+    .left {
+      text-align: left;
+    }
+    .right {
+      text-align: right;
+    }
+
+    .tableFooter {
+      display: flex;
+      width: 100%;
+    }
+  }
+}
