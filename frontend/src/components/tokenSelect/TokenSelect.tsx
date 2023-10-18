@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from '../UI/Modal/Modal';
 import { IToken, IToketSelect } from '../../types/types';
 import styles from './TokenSelect.module.scss';
 import TextChipsOutline from '../UI/textChipsOutline/TextChipsOutline';
+import { getFindToken } from '../../utils/getFindToken';
 
 function TokenSelect(props: IToketSelect) {
   const {
@@ -11,54 +12,46 @@ function TokenSelect(props: IToketSelect) {
     data,
     name = '',
     onClose,
-    selected = [],
     defaultSelected = [],
+    selected = [],
   } = props;
 
-  const [selectedTokensArr, setSelectedTokensArr] = useState<Array<IToken>>([...selected]);
+  const [selectedTokens, setSelectedTokens] = useState<Set<IToken>>(new Set(selected));
+
+  useEffect(() => {
+    setSelectedTokens(new Set(selected));
+  }, [selected]);
 
   const handleOnClose = () => {
-    onClose(selectedTokensArr);
+    onClose([...selectedTokens]);
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, item: IToken) => {
     if (limit > 1) {
-      if (e.currentTarget.checked && selectedTokensArr.length < limit) {
-        setSelectedTokensArr((prevState) => [...prevState, item]);
+      const unicValuesSet = new Set([...defaultSelected, ...selectedTokens]);
+      if (e.currentTarget.checked && unicValuesSet.size < limit) {
+        setSelectedTokens((prevState) => new Set([...prevState, item]));
+        console.log(`Pool tokens added: `, item.name);
       } else {
-        const index = selectedTokensArr.indexOf(item);
-        if (index > -1) {
-          const arr = [...selectedTokensArr];
-          arr.splice(index, 1);
-          setSelectedTokensArr([...arr]);
-        }
+        const newSet = new Set(selectedTokens);
+        newSet.delete(item);
+        setSelectedTokens(newSet);
       }
     } else {
       if (e.currentTarget.checked) {
-        setSelectedTokensArr([item]);
+        setSelectedTokens(new Set<IToken>().add(item));
+        console.log(`Anchor token selected: `, item.name);
       }
     }
   };
 
-  const handleRemove = (address: string) => {
-    let indexEl;
-    const result = selectedTokensArr.find((item, index) => {
-      if (item.address === address) {
-        indexEl = index;
-        return item;
-      }
-    });
-
-    if (result && indexEl) {
-      const arr = selectedTokensArr;
-      arr.splice(indexEl, 1);
-      setSelectedTokensArr([...arr]);
+  const handRemoveTextChips = (address: string) => {
+    const result = getFindToken([...selectedTokens], address);
+    if (result) {
+      const newSet = new Set(selectedTokens);
+      newSet.delete(result);
+      setSelectedTokens(newSet);
     }
-  };
-
-  const isSelected = (selectedArr: Array<IToken>, token: IToken) => {
-    const index = selectedArr.indexOf(token);
-    return index > -1 ? true : false;
   };
 
   return (
@@ -74,16 +67,16 @@ function TokenSelect(props: IToketSelect) {
                 icon={item.iconPath}
               />
             ))}
-          {selectedTokensArr.length > 0 &&
-            selectedTokensArr.map(
+          {selectedTokens.size > 0 &&
+            [...selectedTokens].map(
               (item, index) =>
-                !isSelected(defaultSelected, item) && (
+                !defaultSelected.find((defaultItem) => defaultItem === item) && (
                   <TextChipsOutline
                     key={index}
                     id={item.address}
                     value={item.name}
                     icon={item.iconPath}
-                    onClose={handleRemove}
+                    onClose={handRemoveTextChips}
                   />
                 )
             )}
@@ -108,7 +101,7 @@ function TokenSelect(props: IToketSelect) {
                 <input
                   className={styles.input}
                   onChange={(e) => handleOnChange(e, data[item])}
-                  checked={isSelected(selectedTokensArr, data[item])}
+                  checked={selectedTokens.has(data[item]) ? true : false}
                   type={limit > 1 ? 'checkbox' : 'radio'}
                   name={name}
                 />

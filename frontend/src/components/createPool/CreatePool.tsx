@@ -11,8 +11,9 @@ import InputButton from '../UI/inputButton/InputButton';
 import { IToken } from '../../types/types';
 import TextBtn from '../UI/textBtn/TextBtn';
 import TextChipsOutline from '../UI/textChipsOutline/TextChipsOutline';
-import { useAccount, useContractWrite } from 'wagmi';
+import { useAccount, useContractEvent, useContractWrite } from 'wagmi';
 import { abiCreatePool } from '../../abi/abiCreatePool';
+import { getFilteredTokensArr } from '../../utils/getFilteredTokensArr';
 
 function CreatePool() {
   const [formkey, setFormkey] = useState(Date.now());
@@ -22,9 +23,20 @@ function CreatePool() {
     abi: abiCreatePool,
     functionName: ABI.createVault.name,
   });
+
+  useContractEvent({
+    address: `0x${ABI.createVault.address}`,
+    abi: abiCreatePool,
+    eventName: 'ProfitPalsVaultCreated',
+    listener(log) {
+      console.log('Created pool data: ', log);
+    },
+  });
+
   const nativeNetworkToken = TOKENS.MATIC;
+  const tokentMaxCount = 20;
   const [anchorSelectState, setAnchorSelectState] = useState(false);
-  const [anchorSelected, setAnchorSelected] = useState<Array<IToken>>([]);
+  const [anchorSelected, setAnchorSelected] = useState<IToken | null>(null);
 
   const [approveTokensSelect, setApproveTokensSelect] = useState(false);
   const [approveTokensSelected, setApproveTokensSelected] = useState<Array<IToken>>([]);
@@ -33,13 +45,14 @@ function CreatePool() {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(data);
+      console.log('Transaction hash: ', data?.hash);
+      handleResetForm();
     }
   }, [isSuccess]);
 
   const handleAnchorTokenSelect = (value: Array<IToken>) => {
     setAnchorSelectState(false);
-    setAnchorSelected(value);
+    setAnchorSelected(value[0]);
   };
 
   const handleApproveTokensSelect = (value: Array<IToken>) => {
@@ -48,9 +61,9 @@ function CreatePool() {
   };
 
   const getDefaultSelected = () => {
-    if (anchorSelected.length > 0) {
-      if (anchorSelected[0].name !== nativeNetworkToken.name) {
-        return [anchorSelected[0], nativeNetworkToken];
+    if (anchorSelected) {
+      if (anchorSelected.name !== nativeNetworkToken.name) {
+        return [anchorSelected, nativeNetworkToken];
       } else {
         return [nativeNetworkToken];
       }
@@ -61,22 +74,19 @@ function CreatePool() {
 
   const handleInputOnChange = (value: number) => {
     setInputValue(value);
+    console.log('Interest rate input: ', value);
   };
 
   const getApprovedTokens = () => {
-    const defaultTokens = getDefaultSelected();
-    if (anchorSelected.length) {
-      const setObj = new Set(approveTokensSelected);
-      [...defaultTokens].forEach((el) => {
-        setObj.delete(el);
-      });
-      return [...defaultTokens, ...setObj];
+    if (anchorSelected) {
+      const defaultTokens = getDefaultSelected();
+      return [...new Set([...defaultTokens, ...approveTokensSelected])];
     }
     return [];
   };
 
   const handleResetForm = () => {
-    setAnchorSelected([]);
+    setAnchorSelected(null);
     setApproveTokensSelected([]);
     setInputValue(0);
     setFormkey(Date.now());
@@ -85,19 +95,24 @@ function CreatePool() {
   const handleSubmit = () => {
     const approvedTokens = getApprovedTokens().map((item) => item.address);
     const dataParams = [
-      anchorSelected[0].address,
+      anchorSelected?.address,
       approvedTokens,
       inputValue,
-      nativeNetworkToken.name,
+      nativeNetworkToken.fullName,
       nativeNetworkToken.name,
     ];
 
-    console.log(dataParams);
     if (isConnected) {
+      console.log('Submit data for creating pool: ', dataParams);
       write({
         args: [...dataParams],
       });
     }
+  };
+
+  const handleRemoveTextChips = (address: string) => {
+    const result = getFilteredTokensArr(approveTokensSelected, address);
+    setApproveTokensSelected(result);
   };
 
   return (
@@ -110,9 +125,9 @@ function CreatePool() {
           <div className={styles.create_pool__form_el}>
             <FormElTitle>Anchor currency</FormElTitle>
             <InputButton
-              value={anchorSelected[0]?.name}
+              value={anchorSelected ? anchorSelected.name : ''}
               defaultText='Select a token'
-              icon={anchorSelected[0]?.iconPath}
+              icon={anchorSelected?.iconPath}
               onClick={() => {
                 setAnchorSelectState(true);
               }}
@@ -125,18 +140,23 @@ function CreatePool() {
               onClick={() => {
                 setApproveTokensSelect(true);
               }}
-              disabled={!anchorSelected[0] && true}
+              disabled={(!anchorSelected && true) || getApprovedTokens().length >= tokentMaxCount}
             >
               Add token
             </TextBtn>
-            {anchorSelected[0] && (
+            {anchorSelected && (
               <div className={styles.create_pool__form_tokens}>
-                {getApprovedTokens().map((item, index) => (
+                {[...getApprovedTokens()].map((item, index) => (
                   <TextChipsOutline
                     key={index}
                     id={item.address}
                     value={item.name}
                     icon={item.iconPath}
+                    onClose={
+                      !getDefaultSelected().find((defaultItem) => defaultItem === item)
+                        ? handleRemoveTextChips
+                        : undefined
+                    }
                   />
                 ))}
               </div>
@@ -150,10 +170,11 @@ function CreatePool() {
               max={100}
               handleInputOnChange={handleInputOnChange}
               placeholder='0'
+              symbol='%'
               value={inputValue}
             />
           </div>
-          <ButtonPrimary disabled={!(anchorSelected.length && inputValue)} onClick={handleSubmit}>
+          <ButtonPrimary disabled={!(anchorSelected && inputValue)} onClick={handleSubmit}>
             Create Pool
           </ButtonPrimary>
         </form>
@@ -165,16 +186,16 @@ function CreatePool() {
         name={'anchorToken'}
         data={TOKENS}
         onClose={handleAnchorTokenSelect}
-        selected={anchorSelected}
+        selected={anchorSelected ? [anchorSelected] : []}
       />
 
-      {anchorSelected[0] && (
+      {anchorSelected && (
         <TokenSelect
           isOpen={approveTokensSelect}
-          limit={3}
+          limit={tokentMaxCount}
           data={TOKENS}
           onClose={handleApproveTokensSelect}
-          selected={approveTokensSelected}
+          selected={[...approveTokensSelected]}
           defaultSelected={getDefaultSelected()}
         />
       )}
