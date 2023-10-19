@@ -41,7 +41,7 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Initializable {
     function initialize(
         GnosisSafeL2 safe_
     ) public initializer {
-
+        safe = safe_;
     }
 
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {
