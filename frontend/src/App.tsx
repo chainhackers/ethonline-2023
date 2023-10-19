@@ -7,6 +7,12 @@ import { ROUTES } from './constants/constants';
 import { Header } from './components';
 
 function App() {
+  const versionGitTag = import.meta.env.VITE_REACT_APP_GIT_TAG;
+  const gitDate = import.meta.env.VITE_REACT_APP_GIT_DATE;
+
+  console.log('VITE_REACT_APP_GIT_TAG - ', versionGitTag);
+  console.log('VITE_REACT_APP_GIT_DATE - ', gitDate);
+
   return (
     <div className='app'>
       <BrowserRouter>
