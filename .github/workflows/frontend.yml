@@ -29,9 +29,13 @@ jobs:
       - name: Load environment variables
         working-directory: ${{ github.workspace }}/frontend
         run: |
-          echo ${{ vars.VITE_REACT_POLYGON_ADDRESS_PP_VAULT_FACTORY }} > .env
+          echo VITE_REACT_POLYGON_ADDRESS_PP_VAULT_FACTORY=${{ vars.VITE_REACT_POLYGON_ADDRESS_PP_VAULT_FACTORY }} >> .env
           echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} >> .env
           echo VITE_REACT_APP_GIT_DATE="$(git log -1 --format=%cd)" >> .env
+
+      - name: Print .env
+        working-directory: ${{ github.workspace }}/frontend
+        run: cat .env
 
       - name: ESlint check
         working-directory: ${{ github.workspace }}/frontend
@@ -43,7 +47,8 @@ jobs:
 
       - name: Put Git tag and time to .env file
         run: |
-          echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} > ${{ github.workspace }}/frontend/dist/.env
+          echo VITE_REACT_POLYGON_ADDRESS_PP_VAULT_FACTORY=${{ vars.VITE_REACT_POLYGON_ADDRESS_PP_VAULT_FACTORY }} >> ${{ github.workspace }}/frontend/dist/.env
+          echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} >> ${{ github.workspace }}/frontend/dist/.env
           echo VITE_REACT_APP_GIT_DATE="$(date +'%Y-%m-%d')" >> ${{ github.workspace }}/frontend/dist/.env
 
       - name: Upload Artifacts
