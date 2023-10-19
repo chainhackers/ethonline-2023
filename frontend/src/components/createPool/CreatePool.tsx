@@ -19,13 +19,13 @@ function CreatePool() {
   const [formkey, setFormkey] = useState(Date.now());
   const { isConnected } = useAccount();
   const { data, isSuccess, write } = useContractWrite({
-    address: `0x${ABI.createVault.address}`,
+    address: ABI.createVault.address!,
     abi: abiCreatePool,
     functionName: ABI.createVault.name,
   });
 
   useContractEvent({
-    address: `0x${ABI.createVault.address}`,
+    address: ABI.createVault.address!,
     abi: abiCreatePool,
     eventName: 'ProfitPalsVaultCreated',
     listener: (log) => {
