@@ -3,7 +3,7 @@ export const ANIMATION_MS = 200;
 export const ABI = {
   createVault: {
     name: 'createVault',
-    address: '546C7a5166928a1F20F62456d2E9DdaDf6CEFcBe',
+    address: import.meta.env.VITE_REACT_POLYGON_ADDRESS_PP_VAULT_FACTORY,
   },
 };
 
