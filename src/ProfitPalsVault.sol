@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "./interfaces/IProfitPalsVault.sol";
 import "@openzeppelin/token/ERC20/extensions/ERC4626.sol";
 import "@safe-contracts/GnosisSafeL2.sol";
-import "@safe-contracts/base/GuardManager.sol";
+import { Guard } from "@safe-contracts/base/GuardManager.sol";
 import "@safe-contracts/proxies/GnosisSafeProxyFactory.sol";
 import "@openzeppelin/proxy/utils/Initializable.sol";
 
