@@ -1,7 +1,37 @@
 .token_select {
   width: 420px;
 
-  &__label{
+  &__default {
+    .token_select__item {
+      background-color: #374B3E;
+    }
+  }
+
+  &__selected {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__items {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: scroll;
+    scrollbar-color: rgba(255,255,255,0.2); /*Mozilla*/
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: rgba(255,255,255,0.2);
+        border-radius: 100px;
+    }
+  }
+
+  &__label,
+  &__default{
     cursor:pointer;
     color:var(--neon-silver);
     position:relative;
@@ -18,6 +48,19 @@
 
     &:hover {
       background-color: #374B3E;
+    }
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      object-fit: contain;
     }
   }
 
