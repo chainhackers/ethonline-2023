@@ -1,0 +1,53 @@
+.iconsList {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  .icon {
+    opacity: 0.9;
+    height: 28px;
+    width: 28px;
+    &:not(:first-child) {
+      transform: translateX(-20px);
+    }
+  }
+  .availableTokens {
+    display: flex;
+    align-items: center;
+    .icon {
+      &:nth-child(2) {
+        transform: translateX(-10px);
+      }
+      &:nth-child(3) {
+        transform: translateX(-20px);
+      }
+      &:nth-child(4) {
+        transform: translateX(-30px);
+      }
+      &:nth-child(5) {
+        transform: translateX(-40px);
+      }
+      &:nth-child(6) {
+        transform: translateX(-50px);
+      }
+      &:nth-child(7) {
+        transform: translateX(-60px);
+      }
+    }
+    .tokensLeft {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #292a2d;
+      border-radius: 50%;
+      transform: translateX(-70px);
+      height: 30px;
+      width: 30px;
+
+      color: #c3c6cf;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.25px;
+    }
+  }
+}
