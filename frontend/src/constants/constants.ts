@@ -3,7 +3,7 @@ export const ANIMATION_MS = 200;
 export const ABI = {
   createVault: {
     name: 'createVault',
-    address: 'fD6c08b35b4B61A5cd82164F3F4139EEd9b53263',
+    address: 'DdfA2afB05a06cC8D50BEd38E4f7B12AfedC12D2',
   },
 };
 

@@ -28,7 +28,7 @@ function CreatePool() {
     address: `0x${ABI.createVault.address}`,
     abi: abiCreatePool,
     eventName: 'ProfitPalsVaultCreated',
-    listener(log) {
+    listener: (log) => {
       console.log('Created pool data: ', log);
     },
   });
