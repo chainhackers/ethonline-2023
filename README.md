@@ -21,6 +21,20 @@ Our ETHOnline2023 focus: integration with Uniswap and harnessing Safe smart wall
 ## Development
 
 Monorepo setup: smart contracts in root, frontend in its folder. We integrate Foundry/Forge with GitHub Actions for streamlined CI/CD.
+### Deployed instances
+* [ProfitPalsVaultFactory](https://polygonscan.com/address/0xCFE179E40FA25743906821869AbE99Fd859e2ac7#code)  
+* [ProfitPalsVault(USDC, [WBTC, WETH])](https://polygonscan.com/address/0x102731a8c655178c740c8cc9f2320887f1240f13#code)
+
+
+### Clone/Checkout
+Clone with submodules
+```shell
+git clone --recurse-submodules git@github.com:chainhackers/ethonline-2023.git
+```
+Update submodules when you need to
+```shell
+git submodule update --init --recursive
+```
 
 ## Links
 - **ChainHackers**: [https://chainhackers.xyz/](https://chainhackers.xyz/)
