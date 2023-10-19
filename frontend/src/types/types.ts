@@ -24,3 +24,23 @@ export interface IToketSelect {
   selected: Array<IToken>;
   defaultSelected?: Array<IToken>;
 }
+
+export interface ITokenObject {
+  chainId: number;
+  name: string;
+  symbol: string;
+  decimals: number;
+  address: string;
+  logoURI?: string;
+  tags: string[];
+  extensions: {
+    originTokenAddress?: string;
+    project?: {
+      name: string;
+      summary: string;
+      contact: string;
+      website: string;
+    };
+    originTokenNetwork: number;
+  };
+}
