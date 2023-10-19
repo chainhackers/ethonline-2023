@@ -27,7 +27,7 @@
     color: rgba(var(--neon-silver-rgb), 0.38);
   }
 
-  &_icon {
+  &:disabled &_icon {
     path {
       fill: rgba(var(--neon-silver-rgb), 0.38);
     }

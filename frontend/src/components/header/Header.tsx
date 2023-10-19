@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import styles from './Header.module.scss';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ROUTES } from 'src/constants/constants';
 
 export const Header: FC = () => {
   const location = useLocation();
@@ -9,13 +10,19 @@ export const Header: FC = () => {
 
   return (
     <header className={styles.header}>
-      <Link to={'/'}>
+      <NavLink to={'/'}>
         <img src='assets/Logo.avif' alt='' />
-      </Link>
+      </NavLink>
       <nav>
-        <Link className={currentPath === '/' ? styles.active : ''} to={'/'}>
+        <NavLink className={currentPath === '/' ? styles.active : ''} to={'/'}>
           Pools available
-        </Link>
+        </NavLink>
+        <NavLink
+          to={ROUTES.assetManagement}
+          className={({ isActive }) => `${isActive && styles.active}`}
+        >
+          Aasset Management
+        </NavLink>
       </nav>
       <ConnectButton />
     </header>

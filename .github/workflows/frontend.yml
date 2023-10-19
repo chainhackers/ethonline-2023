@@ -27,8 +27,9 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Load environment variables
+        working-directory: ${{ github.workspace }}/frontend
         run: |
-          echo "${{ secrets.ENV_VARIABLES }}" > .env
+          echo ${{ vars.VITE_REACT_POLYGON_ADDRESS_PP_VAULT_FACTORY }} > .env
           echo VITE_REACT_APP_GIT_TAG=${{  github.ref_name }} >> .env
           echo VITE_REACT_APP_GIT_DATE="$(git log -1 --format=%cd)" >> .env
 

@@ -9,7 +9,8 @@ interface IInputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   defaultValue?: number;
   min: number;
   max: number;
-  handleInputOnChange: () => void;
+  symbol?: string;
+  handleInputOnChange: (value: number) => void;
 }
 
 const InputField = React.forwardRef<HTMLInputElement, IInputFieldProps>((props, ref) => {
@@ -21,6 +22,7 @@ const InputField = React.forwardRef<HTMLInputElement, IInputFieldProps>((props, 
     value = defaultValue,
     min,
     max,
+    symbol = '',
     handleInputOnChange,
     ...inputProps
   } = props;
@@ -36,7 +38,7 @@ const InputField = React.forwardRef<HTMLInputElement, IInputFieldProps>((props, 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value.slice(0, max.toString().length);
     setInputValue(value);
-    handleInputOnChange();
+    handleInputOnChange(Number(value));
   };
 
   const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -62,6 +64,7 @@ const InputField = React.forwardRef<HTMLInputElement, IInputFieldProps>((props, 
           onFocus={(e) => handleOnFocus(e)}
           onBlur={(e) => handleOnBlur(e)}
         />
+        {symbol && <span className={styles.symbol}>{symbol}</span>}
       </label>
     </div>
   );

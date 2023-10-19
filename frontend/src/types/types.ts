@@ -22,6 +22,7 @@ export interface IToketSelect {
   name?: string;
   onClose: (value: Array<IToken>) => void;
   selected: Array<IToken>;
+  defaultSelected?: Array<IToken>;
 }
 
 export interface ITokenObject {

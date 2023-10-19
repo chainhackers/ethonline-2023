@@ -4,10 +4,11 @@ import styles from './FormHeader.module.scss';
 interface IFormHeader {
   title: string;
   linkText: string;
+  handleBtnClick: () => void;
 }
 
 function FormHeader(props: IFormHeader) {
-  const { title, linkText } = props;
+  const { title, linkText, handleBtnClick } = props;
 
   return (
     <div className={styles.form_header}>
@@ -16,7 +17,7 @@ function FormHeader(props: IFormHeader) {
         <span>{linkText}</span>
       </a>
       <h2 className={styles.form_header__title}>{title}</h2>
-      <ButtonSm>Clear All</ButtonSm>
+      <ButtonSm onClick={handleBtnClick}>Clear All</ButtonSm>
     </div>
   );
 }

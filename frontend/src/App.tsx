@@ -1,17 +1,29 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { PoolsPage } from 'Pages';
 import './index.scss';
 import '@rainbow-me/rainbowkit/styles.css';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <PoolsPage poolsType={'All Pools'} />,
-  },
-]);
+import CreatePool from './components/createPool/CreatePool';
+import { ROUTES } from './constants/constants';
+import { Header } from './components';
 
 function App() {
-  return <RouterProvider router={router} />;
+  const versionGitTag = import.meta.env.VITE_REACT_APP_GIT_TAG;
+  const gitDate = import.meta.env.VITE_REACT_APP_GIT_DATE;
+
+  console.log('VITE_REACT_APP_GIT_TAG - ', versionGitTag);
+  console.log('VITE_REACT_APP_GIT_DATE - ', gitDate);
+
+  return (
+    <div className='app'>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path='/' element={<PoolsPage poolsType={'All Pools'} />} />
+          <Route path={ROUTES.assetManagement} element={<CreatePool />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
