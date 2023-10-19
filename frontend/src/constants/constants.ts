@@ -3,7 +3,7 @@ export const ANIMATION_MS = 200;
 export const ABI = {
   createVault: {
     name: 'createVault',
-    address: 'DdfA2afB05a06cC8D50BEd38E4f7B12AfedC12D2',
+    address: '546C7a5166928a1F20F62456d2E9DdaDf6CEFcBe',
   },
 };
 
@@ -15,7 +15,7 @@ export const TOKENS = {
   MATIC: {
     fullName: 'MATIC',
     name: 'MATIC',
-    address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    address: '0x0000000000000000000000000000000000001010',
     decimals: 18,
     iconPath: 'assets/img/tokens/polygon-matic-logo.svg',
   },
