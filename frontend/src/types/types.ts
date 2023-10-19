@@ -23,3 +23,23 @@ export interface IToketSelect {
   onClose: (value: Array<IToken>) => void;
   selected: Array<IToken>;
 }
+
+export interface ITokenObject {
+  chainId: number;
+  name: string;
+  symbol: string;
+  decimals: number;
+  address: string;
+  logoURI?: string;
+  tags: string[];
+  extensions: {
+    originTokenAddress?: string;
+    project?: {
+      name: string;
+      summary: string;
+      contact: string;
+      website: string;
+    };
+    originTokenNetwork: number;
+  };
+}
