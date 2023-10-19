@@ -103,6 +103,7 @@ function CreatePool() {
     ];
 
     if (isConnected) {
+      console.log('Contract address: ', ABI.createVault.address);
       console.log('Submit data for creating pool: ', dataParams);
       write({
         args: [...dataParams],
