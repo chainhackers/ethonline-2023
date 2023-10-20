@@ -11,21 +11,28 @@ export const TokenIconsCell: FC<TokensIconsPropsI> = ({ anchorCurrency, tokens }
   const polygonData: ITokenObject[] = polygonPopular;
 
   const getTokenIcon = (tokenAddress: string) => {
+    console.log('123s', typeof tokenAddress);
     for (const elem of polygonData) {
-      if (elem.address === tokenAddress) {
+      if (elem.address == tokenAddress) {
+        console.log('---', elem.address);
+        console.log('---', tokenAddress);
+        console.log(elem);
         return elem;
       }
     }
   };
 
   const getAllTokensIcons = () => {
-    setAnchorCurrencyInfo(getTokenIcon(anchorCurrency));
+    const test = getTokenIcon(anchorCurrency);
+    console.log('test', test);
+    setAnchorCurrencyInfo(test);
     const tokensInfoList: ITokenObject[] = tokens
       .map((token) => getTokenIcon(token))
       .filter((token): token is ITokenObject => {
         return token !== undefined;
       });
     setTokensInfo(tokensInfoList);
+    // console.log('result', tokensInfoList);
   };
   useEffect(() => {
     getAllTokensIcons();
