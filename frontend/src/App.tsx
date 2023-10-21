@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path='/' element={<PoolsPage poolsType={'All Pools'} />} />
+          <Route path={ROUTES.poolsAvailable} element={<PoolsPage poolsType={'All Pools'} />} />
           <Route path={ROUTES.assetManagement} element={<CreatePool />} />
           <Route path={ROUTES.landing} element={<LandingPage />} />
         </Routes>

@@ -10,11 +10,14 @@ export const Header: FC = () => {
 
   return (
     <header className={styles.header}>
-      <NavLink to={'/landing'}>
+      <NavLink to={ROUTES.landing}>
         <img src='assets/Logo.avif' alt='' />
       </NavLink>
       <nav>
-        <NavLink className={currentPath === '/' ? styles.active : ''} to={'/'}>
+        <NavLink
+          className={currentPath === ROUTES.poolsAvailable ? styles.active : ''}
+          to={ROUTES.poolsAvailable}
+        >
           Pools available
         </NavLink>
         <NavLink

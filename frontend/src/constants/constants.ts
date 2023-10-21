@@ -10,6 +10,7 @@ export const ABI = {
 export const ROUTES = {
   landing: '/landing',
   assetManagement: '/asset-management',
+  poolsAvailable: '/pools-available',
 };
 
 export const TOKENS = {
