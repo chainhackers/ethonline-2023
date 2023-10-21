@@ -1,0 +1,166 @@
+@mixin text {
+  color:  #C7C6CA;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.25px;
+}
+
+@mixin title {
+  color:  #FFF;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px; /* 125% */
+
+  span {
+    font-size: inherit;
+    color: #39E193;
+    line-height: inherit;
+  }
+}
+
+.button__main {
+  display: flex;
+  padding: 10px 24px;
+  justify-content: center;
+  align-items: center;
+  background-color: #39E193;
+  border-radius: 100px;
+  border: none;
+  color:  #003920;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.25px;
+  text-transform: capitalize;
+}
+
+.title {
+  @include title;
+
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 120px 142px 0;
+  gap: 120px;
+
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 50px;
+    h2 {width: 65%}
+  }
+
+  .hero {
+    display: flex;
+    align-items: flex-start;
+    .hero__content {
+      display: flex;
+      width: 70%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+
+      .hero__title {
+        @include title;
+        font-size: 51px;
+        line-height: 57px;
+        span {
+          font-size: inherit;
+          color: #39E193;
+          line-height: inherit;
+        }
+      }
+
+      .hero__description {
+        @include text
+      }
+    }
+  }
+  .decentralizedFinancialService {
+    width: 100%;
+    border-radius: 30px;
+  }
+  .gridCards {
+    display: grid;
+    gap: 24px;
+    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+  .howItWorks {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr 1fr;
+
+    .bigCard {
+      display: flex;
+      width: 100%;
+      padding: 24px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+      border-radius: 16px;
+      border: 1px solid #222225;
+
+      background: rgba(189, 189, 189, 0.03);
+
+      h4 {
+        color: #F2F2F2;
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 28px;
+      }
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 32px;
+        li {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          gap: 8px;
+          h5 {
+            margin: 0;
+            color:  #FFF;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0.25px;}
+          span {
+            color:  #C7C6CA;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px; /* 150% */
+            letter-spacing: 0.25px;
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .description {
+      @include title;
+      width: 70%;
+      font-size: 22px;
+      padding-bottom: 120px;
+    }
+  }
+}

@@ -8,7 +8,9 @@ export const ABI = {
 };
 
 export const ROUTES = {
+  landing: '/',
   assetManagement: '/asset-management',
+  poolsAvailable: '/pools-available',
 };
 
 export const NATIVE_NETWORK_TOKEN = {

@@ -5,6 +5,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import CreatePool from './components/createPool/CreatePool';
 import { ROUTES } from './constants/constants';
 import { Header } from './components';
+import { LandingPage } from 'Pages/LandingPage/LandingPage.tsx';
 import PoolDetail from './components/poolDetail/PoolDetail';
 
 function App() {
@@ -19,8 +20,9 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path='/' element={<PoolsPage poolsType={'All Pools'} />} />
+          <Route path={ROUTES.poolsAvailable} element={<PoolsPage poolsType={'All Pools'} />} />
           <Route path={ROUTES.assetManagement} element={<CreatePool />} />
+          <Route path={ROUTES.landing} element={<LandingPage />} />
           <Route path={`${ROUTES.assetManagement}/:poolAddress`} element={<PoolDetail />} />
         </Routes>
       </BrowserRouter>
