@@ -6,6 +6,7 @@ import CreatePool from './components/createPool/CreatePool';
 import { ROUTES } from './constants/constants';
 import { Header } from './components';
 import { LandingPage } from 'Pages/LandingPage/LandingPage.tsx';
+import PoolDetail from './components/poolDetail/PoolDetail';
 
 function App() {
   const versionGitTag = import.meta.env.VITE_REACT_APP_GIT_TAG;
@@ -22,6 +23,7 @@ function App() {
           <Route path={ROUTES.poolsAvailable} element={<PoolsPage poolsType={'All Pools'} />} />
           <Route path={ROUTES.assetManagement} element={<CreatePool />} />
           <Route path={ROUTES.landing} element={<LandingPage />} />
+          <Route path={`${ROUTES.assetManagement}/:poolAddress`} element={<PoolDetail />} />
         </Routes>
       </BrowserRouter>
     </div>

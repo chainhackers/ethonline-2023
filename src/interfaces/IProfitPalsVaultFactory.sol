@@ -15,7 +15,7 @@ interface IProfitPalsVaultFactory {
 
     function createVault(
         IERC20 anchorCurrency,
-        IERC20[] calldata tokens,
+        address[] calldata tokens,
         uint256 operatorFee,
         string memory name_,
         string memory symbol_

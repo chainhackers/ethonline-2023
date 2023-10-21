@@ -13,14 +13,15 @@ export const ROUTES = {
   poolsAvailable: '/pools-available',
 };
 
+export const NATIVE_NETWORK_TOKEN = {
+  fullName: 'MATIC',
+  name: 'MATIC',
+  address: '0x0000000000000000000000000000000000000000',
+  decimals: 18,
+  iconPath: 'assets/img/tokens/polygon-matic-logo.svg',
+};
+
 export const TOKENS = {
-  MATIC: {
-    fullName: 'MATIC',
-    name: 'MATIC',
-    address: '0x0000000000000000000000000000000000001010',
-    decimals: 18,
-    iconPath: 'assets/img/tokens/polygon-matic-logo.svg',
-  },
   USDC: {
     fullName: 'USDCoin',
     name: 'USDC',
@@ -41,6 +42,13 @@ export const TOKENS = {
     address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
     decimals: 18,
     iconPath: 'assets/img/tokens/weth.svg',
+  },
+  WMATIC: {
+    fullName: 'WMATIC',
+    name: 'WMATIC',
+    address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    decimals: 18,
+    iconPath: 'assets/img/tokens/polygon-matic-logo.svg',
   },
   TetherUSDt: {
     fullName: '(PoS)TetherUSD',
