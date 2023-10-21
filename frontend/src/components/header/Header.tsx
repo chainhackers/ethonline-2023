@@ -10,7 +10,7 @@ export const Header: FC = () => {
 
   return (
     <header className={styles.header}>
-      <NavLink to={'/'}>
+      <NavLink to={'/landing'}>
         <img src='assets/Logo.avif' alt='' />
       </NavLink>
       <nav>
