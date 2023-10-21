@@ -28,6 +28,11 @@ jobs:
           forge build --sizes
         id: build
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: interfaces-abi
+          path: contracts/out/I**sol/I**json
+
       - name: Run Forge tests
         env:
           POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
