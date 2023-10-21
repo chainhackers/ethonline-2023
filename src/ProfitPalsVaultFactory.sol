@@ -33,9 +33,9 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
     }
 
     /**
-        @dev create a new ProfitPalsVault
+        @dev create a new ProfitPalsVault with allowlist of tokens
         @dev create a new Safe account with the ProfitPalsVault as the owner
-        @dev create a new Guard with allowlist of tokens, and set it as the guard for the safe
+        @dev set the vault as the guard for the safe
         @dev give the operator the ability to manage the safe
         @param anchorCurrency - The main or anchor ERC20 token that the vault will manage.
         @param tokens - The list of tokens that the vault will allow to be deposited.
@@ -45,7 +45,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
     */
     function createVault(
         IERC20 anchorCurrency,
-        IERC20[] calldata tokens,
+        address[] calldata tokens,
         uint256 operatorFee,
         string memory name,
         string memory symbol
@@ -78,24 +78,13 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
         GnosisSafeProxy proxy = GnosisSafeProxyFactory(SAFE_PROXY_FACTORY_130_POLYGON).createProxyWithNonce(
             SAFE_LOGIC_SINGLETON_POLYGON,
             safeInitializerData,
-            983111213198243123 //owners[0] is always a new contract, don't need to worry about nonce
+            0 //owners[0] is always a new contract, don't need to worry about nonce
         );
         GnosisSafeL2 safe = GnosisSafeL2(payable(address(proxy)));
 
         bytes memory setGuardData = abi.encodeCall(
             GuardManager.setGuard,
             address(vault)
-        );
-
-//        https://docs.safe.global/safe-smart-account/signatures#contract-signature-eip-1271
-//        {32-bytes signature verifier}{32-bytes data position}{1-byte signature type}
-//        {32-bytes signature length}{bytes signature data}
-        bytes memory signature = bytes.concat(
-            abi.encode(address(this)),
-            abi.encode(uint8(65)),
-            bytes1(0),    //static part ends here
-            abi.encode(uint8(1)),   //signature length
-            bytes1(0)     //signature data
         );
 
         safe.execTransaction(
@@ -108,11 +97,11 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
             0, // gasPrice
             address(0), // gasToken
             payable(address(this)), // refundReceiver
-            signature
+            nopSignature
         );
 
         for (uint256 i = 0; i < tokens.length; i++) {
-            approveToken(safe, tokens[i]);
+            approveToken(safe, IERC20(tokens[i]));
         }
 
         vault.initialize(safe);
@@ -144,6 +133,9 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
     }
 
     function isValidSignature(bytes memory _data, bytes memory _signature) public view override returns (bytes4){
-        return bytes4(EIP1271_MAGIC_VALUE); //TODO
+        if (keccak256(_signature) == keccak256(hex"00")) {//TODO do some actual checking
+            return bytes4(EIP1271_MAGIC_VALUE);
+        }
+        return bytes4(0);
     }
 }

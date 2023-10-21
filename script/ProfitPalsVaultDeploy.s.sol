@@ -7,16 +7,14 @@ import {IERC20} from "@openzeppelin/token/ERC20/IERC20.sol";
 import "../src/ProfitPalsVaultFactory.sol";
 
 contract ProfitPalsVaultDeploy is Script {
-    IERC20[] public allowedTokens;
+    address[] public allowedTokens;
+    IERC20 anchorCurrency;
 
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address deployerAddr = vm.addr(deployerPrivateKey);
 
-
-        allowedTokens.push(IERC20(USDC_POLYGON));
-        allowedTokens.push(IERC20(WBTC_POLYGON));
-        allowedTokens.push(IERC20(WETH_POLYGON));
+        allowedTokens.push(WBTC_POLYGON);
+        allowedTokens.push(WETH_POLYGON);
 
         vm.startBroadcast(deployerPrivateKey);
 
