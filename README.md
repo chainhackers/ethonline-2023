@@ -2,7 +2,8 @@
 
 ChainHackers presents ProfitPals, our ETHOnline2023 entry, pioneering the concept of social liquidity mining in DeFi.
 
----
+![DALL·E_2023_10_21_15_00_23_Drawing_of_a_schematic_where_a_pie_chart](https://github.com/chainhackers/ethonline-2023/assets/89840876/6689aa58-08b4-45be-8a7f-b409faea74f0)
+
 
 ## Overview
 
