@@ -82,6 +82,10 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
         );
         GnosisSafeL2 safe = GnosisSafeL2(payable(address(proxy)));
 
+        for (uint256 i = 0; i < tokens.length; i++) {
+            approveToken(safe, IERC20(tokens[i]));
+        }
+
         bytes memory setGuardData = abi.encodeCall(
             GuardManager.setGuard,
             address(vault)
@@ -99,10 +103,6 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
             payable(address(this)), // refundReceiver
             nopSignature
         );
-
-        for (uint256 i = 0; i < tokens.length; i++) {
-            approveToken(safe, IERC20(tokens[i]));
-        }
 
         vault.initialize(safe);
 
@@ -132,7 +132,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
         );
     }
 
-    function isValidSignature(bytes memory _data, bytes memory _signature) public view override returns (bytes4){
+    function isValidSignature(bytes memory, bytes memory _signature) public view override returns (bytes4){
         if (keccak256(_signature) == keccak256(hex"00")) {//TODO do some actual checking
             return bytes4(EIP1271_MAGIC_VALUE);
         }

@@ -2,7 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/token/ERC20/extensions/ERC4626.sol";
+import "@openzeppelin/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/proxy/utils/Initializable.sol";
+import "@openzeppelin/utils/math/Math.sol";
 
 import "@safe-contracts/GnosisSafeL2.sol";
 import "@safe-contracts/proxies/GnosisSafeProxyFactory.sol";
@@ -80,6 +82,11 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
     mapping(address => bool) isTokenAllowed;
     mapping(address => bool) isContractAllowed;
 
+    //Hackathon version - the only position
+    uint256 position;
+    uint256 balanceBeforeTx;
+    uint256 lastKnownTotalValue;
+
     /**
      * @param anchorCurrency_ - The main or anchor ERC20 token that the vault will manage.
      * @param name_ - Name of the shares token
@@ -118,8 +125,8 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
 
 
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {
-        //TODO add overall Uniswap positions here
-        return anchorCurrency.balanceOf(address(this));
+        uint256 anchorCurrencyBalance = anchorCurrency.balanceOf(address(safe));
+        return anchorCurrencyBalance + positionValueInAnchorCurrency();
     }
 
     function deposit(uint256 amount) external {
@@ -176,12 +183,73 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
             refundReceiver,
             signatures,
             msgSender));
-        //TODO keep record of mint txs
         //TODO keep record of burn ( decrease liquidity ) txs
+
+        balanceBeforeTx = getPositionsBalanceInSafe();
     }
 
-    function checkAfterExecution(bytes32 txHash, bool success) external override {
+    function checkAfterExecution(bytes32, bool) external override {
         //TODO get minted position IDs
+        uint256 balanceAfterTx = getPositionsBalanceInSafe();
+        if (balanceBeforeTx != balanceAfterTx) {
+            uint256 positionIndex = balanceAfterTx - 1;
+            position = IERC721Enumerable(UV3_NONFUNGIBLE_POSITION_MANAGER).tokenOfOwnerByIndex(
+                address(safe),
+                positionIndex
+            );
+        }
     }
 
+    /**
+      * @dev Deposit/mint common workflow.
+      */
+    function _deposit(address caller, address receiver, uint256 assets, uint256 shares) internal virtual override {
+        SafeERC20.safeTransferFrom(anchorCurrency, caller, address(safe), assets);
+        _mint(receiver, shares);
+
+        emit Deposit(caller, receiver, assets, shares);
+    }
+
+    function _withdraw(
+        address caller,
+        address receiver,
+        address owner,
+        uint256 assets,
+        uint256 shares
+    ) internal virtual override {
+        if (caller != owner) {
+            _spendAllowance(owner, caller, shares);
+        }
+
+        _burn(owner, shares);
+        //TODO
+//        SafeERC20.safeTransfer(_asset, receiver, assets);
+
+        emit Withdraw(caller, receiver, owner, assets, shares);
+    }
+
+    function getPositionsBalanceInSafe() private view returns (uint256 balance){
+        balance = IERC721Enumerable(UV3_NONFUNGIBLE_POSITION_MANAGER).balanceOf(address(safe));
+    }
+
+    function positionValueInAnchorCurrency() private view returns (uint256 value) {
+        //TODO @silvesterdrago #33 get UniswapV3 position estimate
+        if (position > 0) {
+            uint256 debugFakePositionEstimateStub = 3 * 10 ** 4;
+            value = debugFakePositionEstimateStub;
+        }
+        value = 0;
+    }
+
+    /** @dev See {IERC4626-maxWithdraw}. */
+    function maxWithdraw(address owner) public view override(ERC4626, IERC4626) returns (uint256) {
+        return _convertToAssets(
+            Math.min(balanceOf(owner), anchorCurrencyShare()),
+            Math.Rounding.Floor
+        );
+    }
+
+    function anchorCurrencyShare() private view returns (uint256) {
+        return anchorCurrency.balanceOf(address(safe)) / totalAssets();
+    }
 }
