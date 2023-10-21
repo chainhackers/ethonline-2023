@@ -13,6 +13,12 @@
   font-style: normal;
   font-weight: 600;
   line-height: 40px; /* 125% */
+
+  span {
+    font-size: inherit;
+    color: #39E193;
+    line-height: inherit;
+  }
 }
 
 .button__main {
@@ -33,13 +39,27 @@
   text-transform: capitalize;
 }
 
+.title {
+  @include title;
+
+}
+
 .container {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 0 142px;
+  padding: 120px 142px 0;
+  gap: 120px;
+
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 50px;
+    h2 {width: 65%}
+  }
 
   .hero {
-    margin-top: 122px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -66,5 +86,15 @@
         @include text
       }
     }
+  }
+  .decentralizedFinancialService {
+    width: 100%;
+    border-radius: 20px;
+  }
+  .gridCards {
+    display: grid;
+    gap: 24px;
+    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
