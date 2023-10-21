@@ -8,7 +8,7 @@ export const ABI = {
 };
 
 export const ROUTES = {
-  landing: '/landing',
+  landing: '/',
   assetManagement: '/asset-management',
   poolsAvailable: '/pools-available',
 };
