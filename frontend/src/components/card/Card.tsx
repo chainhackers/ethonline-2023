@@ -11,7 +11,7 @@ export const Card: FC<ICard> = ({ title, descriptionList }) => {
       <h3>{title}</h3>
       <ul>
         {descriptionList.map((descriptionItem: string) => (
-          <li>{descriptionItem}</li>
+          <li key={descriptionItem}>{descriptionItem}</li>
         ))}
       </ul>
     </div>
