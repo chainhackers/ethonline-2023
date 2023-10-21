@@ -6,7 +6,7 @@ import InputField from '../inputField/InputField';
 import FormElTitle from '../formElTitle/FormElTitle';
 import TokenSelect from '../tokenSelect/TokenSelect';
 import { useEffect, useState } from 'react';
-import { ABI, TOKENS } from '../../constants/constants';
+import { ABI, ROUTES, TOKENS } from '../../constants/constants';
 import InputButton from '../UI/inputButton/InputButton';
 import { IToken } from '../../types/types';
 import TextBtn from '../UI/textBtn/TextBtn';
@@ -14,11 +14,37 @@ import TextChipsOutline from '../UI/textChipsOutline/TextChipsOutline';
 import { useAccount, useContractEvent, useContractWrite } from 'wagmi';
 import { abiCreatePool } from '../../abi/abiCreatePool';
 import { getFilteredTokensArr } from '../../utils/getFilteredTokensArr';
+import { useNavigate } from 'react-router-dom';
+import { Log } from 'viem';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+
+interface ILogs extends Log {
+  args: {
+    vault: string;
+    anchorCurrency: string;
+    operatorFee: number;
+    name: string;
+    symbol: string;
+  };
+}
 
 function CreatePool() {
+  const navigate = useNavigate();
   const [formkey, setFormkey] = useState(Date.now());
   const { isConnected } = useAccount();
-  const { data, isSuccess, write } = useContractWrite({
+  const { openConnectModal } = useConnectModal();
+
+  const tokensMaxCount = 20;
+  const [anchorSelectState, setAnchorSelectState] = useState(false);
+  const [anchorSelected, setAnchorSelected] = useState<IToken | null>(null);
+
+  const [approveTokensSelect, setApproveTokensSelect] = useState(false);
+  const [approveTokensSelected, setApproveTokensSelected] = useState<Array<IToken>>([]);
+
+  const [inputValue, setInputValue] = useState(0);
+  const [btnSubmitDisabled, setBtnSubmitDisabled] = useState(true);
+
+  const { data, status, write } = useContractWrite({
     address: ABI.createVault.address!,
     abi: abiCreatePool,
     functionName: ABI.createVault.name,
@@ -29,26 +55,32 @@ function CreatePool() {
     abi: abiCreatePool,
     eventName: 'ProfitPalsVaultCreated',
     listener: (log) => {
-      console.log('Created pool data: ', log);
+      handleProfitPalsVaultCreatedEvent(log);
     },
   });
 
-  const nativeNetworkToken = TOKENS.MATIC;
-  const tokentMaxCount = 20;
-  const [anchorSelectState, setAnchorSelectState] = useState(false);
-  const [anchorSelected, setAnchorSelected] = useState<IToken | null>(null);
-
-  const [approveTokensSelect, setApproveTokensSelect] = useState(false);
-  const [approveTokensSelected, setApproveTokensSelected] = useState<Array<IToken>>([]);
-
-  const [inputValue, setInputValue] = useState(0);
+  const handleProfitPalsVaultCreatedEvent = (log: Log[]) => {
+    console.log('Created pool data: ', log);
+    navigate(`${ROUTES.assetManagement}/${(log as ILogs[])[0].args.vault}`);
+  };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (status == 'success') {
       console.log('Transaction hash: ', data?.hash);
       handleResetForm();
     }
-  }, [isSuccess]);
+  }, [status]);
+
+  useEffect(() => {
+    if (anchorSelected) {
+      const approvedTokens = getApprovedTokens();
+      if (approvedTokens.length >= 2 && approvedTokens.length <= tokensMaxCount && inputValue) {
+        setBtnSubmitDisabled(false);
+      } else {
+        setBtnSubmitDisabled(true);
+      }
+    }
+  }, [approveTokensSelected, anchorSelected, inputValue]);
 
   const handleAnchorTokenSelect = (value: Array<IToken>) => {
     setAnchorSelectState(false);
@@ -60,18 +92,6 @@ function CreatePool() {
     setApproveTokensSelected(value);
   };
 
-  const getDefaultSelected = () => {
-    if (anchorSelected) {
-      if (anchorSelected.name !== nativeNetworkToken.name) {
-        return [anchorSelected, nativeNetworkToken];
-      } else {
-        return [nativeNetworkToken];
-      }
-    } else {
-      return [];
-    }
-  };
-
   const handleInputOnChange = (value: number) => {
     setInputValue(value);
     console.log('Interest rate input: ', value);
@@ -79,8 +99,7 @@ function CreatePool() {
 
   const getApprovedTokens = () => {
     if (anchorSelected) {
-      const defaultTokens = getDefaultSelected();
-      return [...new Set([...defaultTokens, ...approveTokensSelected])];
+      return [...new Set([anchorSelected, ...approveTokensSelected])];
     }
     return [];
   };
@@ -92,14 +111,14 @@ function CreatePool() {
     setFormkey(Date.now());
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const approvedTokens = getApprovedTokens().map((item) => item.address);
     const dataParams = [
       anchorSelected?.address,
       approvedTokens,
       inputValue,
-      nativeNetworkToken.fullName,
-      nativeNetworkToken.name,
+      anchorSelected?.name,
+      anchorSelected?.name,
     ];
 
     if (isConnected) {
@@ -141,7 +160,7 @@ function CreatePool() {
               onClick={() => {
                 setApproveTokensSelect(true);
               }}
-              disabled={(!anchorSelected && true) || getApprovedTokens().length >= tokentMaxCount}
+              disabled={(!anchorSelected && true) || getApprovedTokens().length >= tokensMaxCount}
             >
               Add token
             </TextBtn>
@@ -153,11 +172,7 @@ function CreatePool() {
                     id={item.address}
                     value={item.name}
                     icon={item.iconPath}
-                    onClose={
-                      !getDefaultSelected().find((defaultItem) => defaultItem === item)
-                        ? handleRemoveTextChips
-                        : undefined
-                    }
+                    onClose={anchorSelected !== item ? handleRemoveTextChips : undefined}
                   />
                 ))}
               </div>
@@ -175,9 +190,14 @@ function CreatePool() {
               value={inputValue}
             />
           </div>
-          <ButtonPrimary disabled={!(anchorSelected && inputValue)} onClick={handleSubmit}>
-            Create Pool
-          </ButtonPrimary>
+
+          {isConnected ? (
+            <ButtonPrimary disabled={btnSubmitDisabled} onClick={handleSubmit}>
+              Create Pool
+            </ButtonPrimary>
+          ) : (
+            <ButtonPrimary onClick={openConnectModal}>Connect Wallet</ButtonPrimary>
+          )}
         </form>
       </div>
 
@@ -193,11 +213,11 @@ function CreatePool() {
       {anchorSelected && (
         <TokenSelect
           isOpen={approveTokensSelect}
-          limit={tokentMaxCount}
+          limit={tokensMaxCount}
           data={TOKENS}
           onClose={handleApproveTokensSelect}
           selected={[...approveTokensSelected]}
-          defaultSelected={getDefaultSelected()}
+          defaultSelected={[anchorSelected]}
         />
       )}
     </div>

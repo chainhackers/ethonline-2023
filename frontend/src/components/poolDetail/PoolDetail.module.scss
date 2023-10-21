@@ -1,0 +1,24 @@
+.pool {
+  max-width: 920px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 0;
+  color: #fff;
+
+  &__address {
+    color: var(--neon-silver);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.25px;
+    margin-top: 32px;
+  }
+
+  &__detail {
+    border-radius: 16px;
+    background-color: #1B1B1F;
+    gap: 16px 0;
+    padding: 24px 16px;
+    margin-top: 24px;
+  }
+}
