@@ -31,7 +31,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: interfaces-abi
-          path: contracts/out/I**sol/I**json
+          path: out/I**sol/I**json
 
       - name: Run Forge tests
         env:
