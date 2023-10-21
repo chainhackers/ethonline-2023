@@ -12,7 +12,6 @@ export const abiCreatePool = [
     inputs: [
       { indexed: true, internalType: 'contract IProfitPalsVault', name: 'vault', type: 'address' },
       { indexed: true, internalType: 'contract IERC20', name: 'anchorCurrency', type: 'address' },
-      { indexed: false, internalType: 'contract IERC20[]', name: 'tokens', type: 'address[]' },
       { indexed: false, internalType: 'uint256', name: 'operatorFee', type: 'uint256' },
       { indexed: false, internalType: 'string', name: 'name', type: 'string' },
       { indexed: false, internalType: 'string', name: 'symbol', type: 'string' },
@@ -31,6 +30,16 @@ export const abiCreatePool = [
     name: 'createVault',
     outputs: [{ internalType: 'contract IProfitPalsVault', name: '', type: 'address' }],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes', name: '_data', type: 'bytes' },
+      { internalType: 'bytes', name: '_signature', type: 'bytes' },
+    ],
+    name: 'isValidSignature',
+    outputs: [{ internalType: 'bytes4', name: '', type: 'bytes4' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
