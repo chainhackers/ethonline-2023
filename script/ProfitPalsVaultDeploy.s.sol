@@ -25,13 +25,16 @@ contract ProfitPalsVaultDeploy is Script {
             SAFE_PROXY_FACTORY_130_POLYGON
         );
 
-        factory.createVault(
+        IProfitPalsVault vault = factory.createVault(
             IERC20(USDC_POLYGON),
             allowedTokens,
             100,
             "PP_USDC_WETH_WBTC_VAULT",
             "PPV"
         );
+
+        IERC20 usdc = IERC20(USDC_POLYGON);
+        usdc.transfer(address(vault.safe()), 10 ** 4);
 
         vm.stopBroadcast();
     }

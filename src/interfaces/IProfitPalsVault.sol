@@ -3,8 +3,11 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/token/ERC20/IERC20.sol";
 import "@openzeppelin/interfaces/IERC4626.sol";
+import "@safe-contracts/GnosisSafeL2.sol";
 
 interface IProfitPalsVault is IERC4626 {
+    function safe() external view returns (GnosisSafeL2);
+
     function operator() external view returns (address);
 
     function operatorFee() external view returns (uint256);
