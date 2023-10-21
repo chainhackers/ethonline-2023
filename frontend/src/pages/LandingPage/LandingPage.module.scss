@@ -61,9 +61,7 @@
 
   .hero {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-
+    align-items: flex-start;
     .hero__content {
       display: flex;
       width: 70%;
@@ -96,5 +94,73 @@
     gap: 24px;
     grid-auto-rows: 1fr;
     grid-template-columns: 1fr 1fr;
+  }
+  .howItWorks {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr 1fr;
+
+    .bigCard {
+      display: flex;
+      width: 100%;
+      padding: 24px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+      border-radius: 16px;
+      border: 1px solid #222225;
+
+      background: rgba(189, 189, 189, 0.03);
+
+      h4 {
+        color: #F2F2F2;
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 28px;
+      }
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 32px;
+        li {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          gap: 8px;
+          h5 {
+            margin: 0;
+            color:  #FFF;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0.25px;}
+          span {
+            color:  #C7C6CA;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px; /* 150% */
+            letter-spacing: 0.25px;
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .description {
+      @include title;
+      width: 70%;
+      font-size: 22px;
+      padding-bottom: 120px;
+    }
   }
 }
