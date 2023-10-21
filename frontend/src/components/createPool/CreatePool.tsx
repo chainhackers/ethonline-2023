@@ -34,7 +34,7 @@ function CreatePool() {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const tokensMaxCount = 3;
+  const tokensMaxCount = 20;
   const [anchorSelectState, setAnchorSelectState] = useState(false);
   const [anchorSelected, setAnchorSelected] = useState<IToken | null>(null);
 
