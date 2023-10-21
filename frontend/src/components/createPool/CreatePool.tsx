@@ -34,7 +34,7 @@ function CreatePool() {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const tokensMaxCount = 20;
+  const tokensMaxCount = 3;
   const [anchorSelectState, setAnchorSelectState] = useState(false);
   const [anchorSelected, setAnchorSelected] = useState<IToken | null>(null);
 
@@ -61,7 +61,9 @@ function CreatePool() {
 
   const handleProfitPalsVaultCreatedEvent = (log: Log[]) => {
     console.log('Created pool data: ', log);
-    navigate(`${ROUTES.assetManagement}/${(log as ILogs[])[0].args.vault}`);
+    const vaultCreateEvent = (log as ILogs[])[0];
+    const vaultAddress = vaultCreateEvent.args.vault;
+    navigate(`${ROUTES.assetManagement}/${vaultAddress}`);
   };
 
   useEffect(() => {
@@ -74,11 +76,12 @@ function CreatePool() {
   useEffect(() => {
     if (anchorSelected) {
       const approvedTokens = getApprovedTokens();
-      if (approvedTokens.length >= 2 && approvedTokens.length <= tokensMaxCount && inputValue) {
-        setBtnSubmitDisabled(false);
-      } else {
-        setBtnSubmitDisabled(true);
-      }
+      const isInputValid =
+        approvedTokens.length >= 2 && approvedTokens.length <= tokensMaxCount && inputValue;
+
+      setBtnSubmitDisabled(!isInputValid);
+    } else {
+      setBtnSubmitDisabled(true);
     }
   }, [approveTokensSelected, anchorSelected, inputValue]);
 
@@ -160,7 +163,7 @@ function CreatePool() {
               onClick={() => {
                 setApproveTokensSelect(true);
               }}
-              disabled={(!anchorSelected && true) || getApprovedTokens().length >= tokensMaxCount}
+              disabled={!anchorSelected || getApprovedTokens().length >= tokensMaxCount}
             >
               Add token
             </TextBtn>
