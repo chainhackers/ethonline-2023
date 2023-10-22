@@ -65,7 +65,6 @@ export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
 
   useEffect(() => {
     handleGetPoolsData(contractsList);
-    // console.log(getPoolsData(contractsList));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
