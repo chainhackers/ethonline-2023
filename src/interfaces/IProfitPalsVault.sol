@@ -16,7 +16,39 @@ import "@safe-contracts/GnosisSafeL2.sol";
     @author Denise Epstein - <denise31337@gmail.com>
 */
 interface IProfitPalsVault is IERC4626 {
+    struct Action {
+        address to;
+        uint256 value;
+        bytes data;
+        Enum.Operation operation;
+        uint256 safeTxGas;
+        uint256 baseGas;
+        uint256 gasPrice;
+        address gasToken;
+        address payable refundReceiver;
+        bytes signatures;
+        address msgSender;
+    }
+
+    event UnauthorizedActionDetected(
+        address to,
+        uint256 value,
+        bytes data,
+        Enum.Operation operation,
+        uint256 safeTxGas,
+        uint256 baseGas,
+        uint256 gasPrice,
+        address gasToken,
+        address payable refundReceiver,
+        bytes signatures,
+        address msgSender);
+
+    event UnauthorizedActionOperatorMustChangeAnchorBalance(bytes32 txHash);
+
+    event ActionLog(Action action);
+
     event PositionAcquired(uint256 indexed tokenId);
+    event FungibleTokenAcquired(uint256 indexed tokenId, uint amount);
 
     function safe() external view returns (GnosisSafeL2);
 

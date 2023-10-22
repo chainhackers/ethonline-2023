@@ -120,4 +120,12 @@ contract ProfitPalsVaultTest is Test {
         assertEq(usdc.balanceOf(address(vault)), 0);
         assertEq(usdc.balanceOf(address(this)), 5555 * 10 ** 6);
     }
+
+    function test_swap() public {
+        uint256 investment10k = 10000 * 10 ** 6;
+        usdc.approve(address(vault), investment10k);
+        vault.deposit(investment10k, address(this));
+        assertEq(usdc.balanceOf(address(vault.safe())), investment10k);
+        //TODO use Uniswap Universal Router SDK to send swaps
+    }
 }
