@@ -73,6 +73,7 @@ contract ProfitPalsVault is IProfitPalsVault, ISignatureValidator, ERC4626, Guar
     mapping(address => bool) isTokenAllowed;
     mapping(address => bool) isContractAllowed;
 
+    //[POC limitations] https://github.com/chainhackers/ethonline-2023/issues/39
     //Hackathon version - the only position
     uint256 position;
     uint256 positionsBalanceBeforeTx;
@@ -128,7 +129,7 @@ contract ProfitPalsVault is IProfitPalsVault, ISignatureValidator, ERC4626, Guar
 
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {
         uint256 anchorCurrencyBalance = anchorCurrency.balanceOf(address(safe));
-        return anchorCurrencyBalance + positionValueInAnchorCurrency();
+        return anchorCurrencyBalance + positionValueInAnchorCurrency(position);
     }
 
     function pause() external {
@@ -201,6 +202,11 @@ contract ProfitPalsVault is IProfitPalsVault, ISignatureValidator, ERC4626, Guar
 
         uint256 balanceAfterTx = getPositionsBalanceInSafe();
         if (positionsBalanceBeforeTx != balanceAfterTx) {
+//            require(positionValueInAnchorCurrency(position) == 0, "ProfitPalsVault: [POC limitations] only one open position at a time is allowed");
+            if(positionValueInAnchorCurrency(position) > 0){
+                emit UnauthorizedActionOnlyOneOpenPositionAllowed(txHash);
+            }
+
             uint256 positionIndex = balanceAfterTx - 1;
             position = IERC721Enumerable(UV3_NONFUNGIBLE_POSITION_MANAGER).tokenOfOwnerByIndex(
                 address(safe),
@@ -258,7 +264,7 @@ contract ProfitPalsVault is IProfitPalsVault, ISignatureValidator, ERC4626, Guar
         balance = IERC721Enumerable(UV3_NONFUNGIBLE_POSITION_MANAGER).balanceOf(address(safe));
     }
 
-    function positionValueInAnchorCurrency() private view returns (uint256 value) {
+    function positionValueInAnchorCurrency(uint256 positionId) private view returns (uint256 value) {
         //TODO @silvesterdrago #33 get UniswapV3 position estimate
         if (position > 0) {
             uint256 debugFakePositionEstimateStub = 3 * 10 ** 4;

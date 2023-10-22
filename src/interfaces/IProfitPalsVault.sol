@@ -6,7 +6,7 @@ import "@openzeppelin/token/ERC20/IERC20.sol";
 import "@safe-contracts/GnosisSafeL2.sol";
 
 /**
-    @title ProfitPalsVault
+    @title IProfitPalsVault
     @notice ProfitPalsVault acts as the primary vault for the ProfitPals project, holding and managing all assets.
     @notice The main asset, or anchor currency, that is managed within this vault can be any ERC20 token.
     @notice It filters operator interactions using predefined contracts list and allowed tokens.
@@ -30,6 +30,8 @@ interface IProfitPalsVault is IERC4626 {
         address msgSender;
     }
 
+    // debug events: the following events are for manual testing with relaxed limitations ------------------------------
+    // instead of reverting, log unauthorized operator actions
     event UnauthorizedActionDetected(
         address to,
         uint256 value,
@@ -43,7 +45,11 @@ interface IProfitPalsVault is IERC4626 {
         bytes signatures,
         address msgSender);
 
+    //[POC limitations] https://github.com/chainhackers/ethonline-2023/issues/39
     event UnauthorizedActionOperatorMustChangeAnchorBalance(bytes32 txHash);
+    event UnauthorizedActionOnlyOneOpenPositionAllowed(bytes32 txHash);
+    // debug events block end: events above are for manual testing with relaxed limitations ----------------------------
+
 
     event ActionLog(Action action);
 
