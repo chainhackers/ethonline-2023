@@ -16,6 +16,8 @@ import "@safe-contracts/GnosisSafeL2.sol";
     @author Denise Epstein - <denise31337@gmail.com>
 */
 interface IProfitPalsVault is IERC4626 {
+    event PositionAcquired(uint256 indexed tokenId);
+
     function safe() external view returns (GnosisSafeL2);
 
     function operator() external view returns (address);
@@ -29,10 +31,6 @@ interface IProfitPalsVault is IERC4626 {
     function allowedTokensList() external view returns (address[] memory);
 
     function allowedTokensCount() external view returns (uint256);
-
-    function deposit(uint256 amount) external;
-
-    function withdraw(uint256 amount) external;
 
     function pause() external;
 

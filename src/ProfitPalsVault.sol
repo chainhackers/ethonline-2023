@@ -9,6 +9,7 @@ import "@openzeppelin/utils/math/Math.sol";
 import "@safe-contracts/GnosisSafeL2.sol";
 import "@safe-contracts/proxies/GnosisSafeProxyFactory.sol";
 import {Guard} from "@safe-contracts/base/GuardManager.sol";
+import "@safe-contracts/interfaces/ISignatureValidator.sol";
 
 import "./Constants.sol";
 import "./interfaces/IProfitPalsVault.sol";
@@ -23,7 +24,7 @@ import "./interfaces/IProfitPalsVault.sol";
     @author Gene A. Tsvigun - <gene@chainhackers.xyz>
     @author Denise Epstein - <denise31337@gmail.com>
 */
-contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
+contract ProfitPalsVault is IProfitPalsVault, ISignatureValidator, ERC4626, Guard, Initializable {
     address[17] ALLOWED_CONTRACTS = [ //TODO make this list shorter, not all of thesea addresses are necessary
     UV3_UNISWAP_V3_FACTORY,
     UV3_MULTICALL2,
@@ -43,6 +44,18 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
     UNIVERSAL_ROUTER2,
     SAFE_SIGN_MESSAGE_LIB
     ];
+
+//        https://docs.safe.global/safe-smart-account/signatures#contract-signature-eip-1271
+//        {32-bytes signature verifier}{32-bytes data position}{1-byte signature type}
+//        {32-bytes signature length}{bytes signature data}
+    bytes nopSignature = bytes.concat(
+        abi.encode(address(this)),
+        abi.encode(uint8(65)),
+        bytes1(0),    //static part ends here
+        abi.encode(uint8(1)),   //signature length
+        bytes1(0)     //signature data
+    );
+
 
     struct Action {
         address to;
@@ -123,26 +136,17 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
         //TODO send unlimited approvals for all allowedTokens
     }
 
-
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {
         uint256 anchorCurrencyBalance = anchorCurrency.balanceOf(address(safe));
         return anchorCurrencyBalance + positionValueInAnchorCurrency();
     }
 
-    function deposit(uint256 amount) external {
-
-    }
-
-    function withdraw(uint256 amount) external {
-
-    }
-
     function pause() external {
-
+        //TODO
     }
 
     function unpause() external {
-
+        //TODO
     }
 
     function allowedTokensList() external view override returns (address[] memory) {
@@ -197,6 +201,7 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
                 address(safe),
                 positionIndex
             );
+            emit PositionAcquired(positionIndex);
         }
     }
 
@@ -222,8 +227,24 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
         }
 
         _burn(owner, shares);
-        //TODO
-//        SafeERC20.safeTransfer(_asset, receiver, assets);
+
+        bytes memory withdrawData = abi.encodeCall(
+            IERC20.transfer,
+            (receiver, assets)
+        );
+
+        safe.execTransaction(
+            address(anchorCurrency), //to
+            0, //value
+            withdrawData,
+            Enum.Operation.Call,
+            0, // safeTxGas
+            0, // baseGas
+            0, // gasPrice
+            address(0), // gasToken
+            payable(address(this)), // refundReceiver
+            nopSignature
+        );
 
         emit Withdraw(caller, receiver, owner, assets, shares);
     }
@@ -243,13 +264,19 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
 
     /** @dev See {IERC4626-maxWithdraw}. */
     function maxWithdraw(address owner) public view override(ERC4626, IERC4626) returns (uint256) {
-        return _convertToAssets(
-            Math.min(balanceOf(owner), anchorCurrencyShare()),
-            Math.Rounding.Floor
-        );
+        return Math.min(
+            _convertToAssets(balanceOf(owner), Math.Rounding.Floor),
+            anchorCurrency.balanceOf(address(safe)));
     }
 
     function anchorCurrencyShare() private view returns (uint256) {
         return anchorCurrency.balanceOf(address(safe)) / totalAssets();
+    }
+
+    function isValidSignature(bytes memory, bytes memory _signature) public view override returns (bytes4){
+        if (keccak256(_signature) == keccak256(hex"00")) {//TODO do some actual checking
+            return bytes4(EIP1271_MAGIC_VALUE);
+        }
+        return bytes4(0);
     }
 }

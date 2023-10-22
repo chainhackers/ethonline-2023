@@ -114,8 +114,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
     function approveToken(GnosisSafeL2 safe, IERC20 token) private {
         bytes memory approveTokenData = abi.encodeCall(
             IERC20.approve,
-            (address(0x000000000022D473030F116dDEE9F6B43aC78BA3), //Uniswap Permit2
-                type(uint256).max)
+            (address(UV3_PERMIT2), type(uint256).max)
         );
 
         safe.execTransaction(
