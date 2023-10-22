@@ -10,17 +10,26 @@ export type TPool = {
   allowedTokens: string[];
   anchorCurrency: string;
   operatorFee: number;
+  total: number;
 };
 
 export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
   const [poolsData, setPoolsData] = useState<TPool[]>([]);
-  const contract: `0x${string}` = '0x606279b2c388ed37d0e5e52ea0d75eb2b539a57e';
+  const contract: `0x${string}` = '0xd95556ce580e8B7F923Cb739e6B0291734FEF437';
   const contractsList = [contract];
   const getAnchorCurrency = async (address: `0x${string}`) => {
     const data = await publicClientViem.readContract({
       address: address,
       abi: abi,
       functionName: 'anchorCurrency',
+    });
+    return data;
+  };
+  const getTotal = async (address: `0x${string}`) => {
+    const data = await publicClientViem.readContract({
+      address: address,
+      abi: abi,
+      functionName: 'totalAssets',
     });
     return data;
   };
@@ -47,12 +56,14 @@ export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
         const operatorFee = await getOperatorFee(address);
         const allowedTokens = await getAllowedTokens(address);
         const anchorCurrency = await getAnchorCurrency(address);
-        console.log('check', operatorFee, allowedTokens, anchorCurrency);
+        const total = await getTotal(address);
+        console.log('check', total);
         return {
           address: address,
           allowedTokens: allowedTokens,
           anchorCurrency: anchorCurrency,
           operatorFee: operatorFee,
+          total: total,
         } as TPool;
       })
     );
