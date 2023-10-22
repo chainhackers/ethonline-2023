@@ -7,3 +7,6 @@
 [submodule "lib/safe-contracts"]
 	path = lib/safe-contracts
 	url = https://github.com/safe-global/safe-contracts
+[submodule "lib/uniswap-periphery"]
+	path = lib/uniswap-periphery
+	url = https://github.com/Uniswap/v3-periphery
