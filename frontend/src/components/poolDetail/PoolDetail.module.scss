@@ -21,4 +21,24 @@
     padding: 24px 16px;
     margin-top: 24px;
   }
+
+  &__el {
+    margin-top: 24px;
+  }
+  
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__btn_link {
+    border-radius: 20px;
+    padding: 10px 15px;
+    color: var(--accent-color);
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 600;
+    border: 1px solid #8D9199;;
+  }
 }

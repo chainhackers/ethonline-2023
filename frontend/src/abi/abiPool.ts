@@ -1,4 +1,4 @@
-export const abiReadPool = [
+export const abiPool = [
   {
     inputs: [
       { internalType: 'contract IERC20', name: 'anchorCurrency_', type: 'address' },
@@ -121,7 +121,7 @@ export const abiReadPool = [
           { internalType: 'address', name: 'msgSender', type: 'address' },
         ],
         indexed: false,
-        internalType: 'struct IProfitPalsVault.Action',
+        internalType: 'struct ProfitPalsVault.Action',
         name: 'action',
         type: 'tuple',
       },
@@ -148,15 +148,6 @@ export const abiReadPool = [
       { indexed: false, internalType: 'uint256', name: 'shares', type: 'uint256' },
     ],
     name: 'Deposit',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
-    ],
-    name: 'FungibleTokenAcquired',
     type: 'event',
   },
   {
@@ -201,18 +192,6 @@ export const abiReadPool = [
   },
   {
     anonymous: false,
-    inputs: [{ indexed: false, internalType: 'bytes32', name: 'txHash', type: 'bytes32' }],
-    name: 'UnauthorizedActionOnlyOneOpenPositionAllowed',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [{ indexed: false, internalType: 'bytes32', name: 'txHash', type: 'bytes32' }],
-    name: 'UnauthorizedActionOperatorMustChangeAnchorBalance',
-    type: 'event',
-  },
-  {
-    anonymous: false,
     inputs: [
       { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
       { indexed: true, internalType: 'address', name: 'receiver', type: 'address' },
@@ -223,7 +202,6 @@ export const abiReadPool = [
     name: 'Withdraw',
     type: 'event',
   },
-  { stateMutability: 'nonpayable', type: 'fallback' },
   {
     inputs: [
       { internalType: 'address', name: 'owner', type: 'address' },
@@ -288,7 +266,7 @@ export const abiReadPool = [
   },
   {
     inputs: [
-      { internalType: 'bytes32', name: 'txHash', type: 'bytes32' },
+      { internalType: 'bytes32', name: '', type: 'bytes32' },
       { internalType: 'bool', name: '', type: 'bool' },
     ],
     name: 'checkAfterExecution',
