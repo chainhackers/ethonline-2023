@@ -11,7 +11,18 @@ import {GnosisSafeL2} from "@safe-contracts/GnosisSafeL2.sol";
 import "@safe-contracts/common/Enum.sol";
 import "@safe-contracts/interfaces/ISignatureValidator.sol";
 
-
+/**
+    @title ProfitPalsVaultFactory
+    @notice ProfitPalsVaultFactory creates a new Vault with settings that stay immutable during
+    @notice the vault existence, namely Operator address, anchor currency, allowed tokens, operator fee
+    @notice creates a new `GnosisSafeProxy` using `GnosisSafeProxyFactory`
+    @notice approves infinite spending limit to UniswapV3 Permit2 for all allowed tokens
+    @notice sets the vault as one of the new Safe owners, and the operator as the other one
+    @notice It filters operator interactions using predefined contracts list and allowed tokens.
+    @dev Signs every tx to Safe with an EIP1271 signature
+    @author Gene A. Tsvigun - <gene@chainhackers.xyz>
+    @author Denise Epstein - <denise31337@gmail.com>
+*/
 contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator {
     address public immutable safeLogicSingleton;
     address public immutable safeProxyFactory;
@@ -61,7 +72,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
 
         address[] memory owners = new address[](3);
         owners[0] = address(vault);
-        owners[1] = tx.origin; //TODO think about this
+        owners[1] = tx.origin; //TODO drop deployer address from vault owners
         owners[2] = address(this);
 
         bytes memory safeInitializerData = abi.encodeCall(
@@ -69,8 +80,8 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
             (owners,
                 1,
                 address(0),
-                "", //abi.encodeCall(GnosisSafe.setGuard,(guard)),
-                address(0xf48f2B2d2a534e402487b3ee7C18c33Aec0Fe5e4),
+                "",
+                address(SAFE_COMPATIBILITY_FALLBACK_HANDLER),
                 address(0),
                 0,
                 payable(0))
@@ -81,6 +92,10 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
             0 //owners[0] is always a new contract, don't need to worry about nonce
         );
         GnosisSafeL2 safe = GnosisSafeL2(payable(address(proxy)));
+
+        for (uint256 i = 0; i < tokens.length; i++) {
+            approveToken(safe, IERC20(tokens[i]));
+        }
 
         bytes memory setGuardData = abi.encodeCall(
             GuardManager.setGuard,
@@ -100,13 +115,9 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
             nopSignature
         );
 
-        for (uint256 i = 0; i < tokens.length; i++) {
-            approveToken(safe, IERC20(tokens[i]));
-        }
-
         vault.initialize(safe);
 
-        emit ProfitPalsVaultCreated(vault, anchorCurrency, operatorFee, name, symbol);
+        emit ProfitPalsVaultCreated(vault, anchorCurrency, tokens, operatorFee, name, symbol, address(safe));
 
         return vault;
     }
@@ -114,8 +125,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
     function approveToken(GnosisSafeL2 safe, IERC20 token) private {
         bytes memory approveTokenData = abi.encodeCall(
             IERC20.approve,
-            (address(0x000000000022D473030F116dDEE9F6B43aC78BA3), //Uniswap Permit2
-                type(uint256).max)
+            (address(UV3_PERMIT2), type(uint256).max)
         );
 
         safe.execTransaction(
@@ -132,7 +142,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
         );
     }
 
-    function isValidSignature(bytes memory _data, bytes memory _signature) public view override returns (bytes4){
+    function isValidSignature(bytes memory, bytes memory _signature) public view override returns (bytes4){
         if (keccak256(_signature) == keccak256(hex"00")) {//TODO do some actual checking
             return bytes4(EIP1271_MAGIC_VALUE);
         }

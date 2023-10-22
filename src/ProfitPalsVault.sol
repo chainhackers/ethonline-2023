@@ -2,11 +2,15 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/token/ERC20/extensions/ERC4626.sol";
+import "@openzeppelin/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/proxy/utils/Initializable.sol";
+import "@openzeppelin/utils/math/Math.sol";
 
 import "@safe-contracts/GnosisSafeL2.sol";
 import "@safe-contracts/proxies/GnosisSafeProxyFactory.sol";
 import {Guard} from "@safe-contracts/base/GuardManager.sol";
+import "@safe-contracts/interfaces/ISignatureValidator.sol";
+import "@safe-contracts/examples/guards/ReentrancyTransactionGuard.sol";
 
 import "./Constants.sol";
 import "./interfaces/IProfitPalsVault.sol";
@@ -21,7 +25,13 @@ import "./interfaces/IProfitPalsVault.sol";
     @author Gene A. Tsvigun - <gene@chainhackers.xyz>
     @author Denise Epstein - <denise31337@gmail.com>
 */
-contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
+contract ProfitPalsVault is IProfitPalsVault, ISignatureValidator, ERC4626, Guard, Initializable {
+    bytes32 internal constant GUARD_STORAGE_SLOT = keccak256("profit_pals_vault.guard.struct");
+
+    struct PPGuardValue {
+        bool active;
+    }
+
     address[17] ALLOWED_CONTRACTS = [ //TODO make this list shorter, not all of thesea addresses are necessary
     UV3_UNISWAP_V3_FACTORY,
     UV3_MULTICALL2,
@@ -42,34 +52,17 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
     SAFE_SIGN_MESSAGE_LIB
     ];
 
-    struct Action {
-        address to;
-        uint256 value;
-        bytes data;
-        Enum.Operation operation;
-        uint256 safeTxGas;
-        uint256 baseGas;
-        uint256 gasPrice;
-        address gasToken;
-        address payable refundReceiver;
-        bytes signatures;
-        address msgSender;
-    }
+//        https://docs.safe.global/safe-smart-account/signatures#contract-signature-eip-1271
+//        {32-bytes signature verifier}{32-bytes data position}{1-byte signature type}
+//        {32-bytes signature length}{bytes signature data}
+    bytes nopSignature = bytes.concat(
+        abi.encode(address(this)),
+        abi.encode(uint8(65)),
+        bytes1(0),    //static part ends here
+        abi.encode(uint8(1)),   //signature length
+        bytes1(0)     //signature data
+    );
 
-    event UnauthorizedActionDetected(
-        address to,
-        uint256 value,
-        bytes data,
-        Enum.Operation operation,
-        uint256 safeTxGas,
-        uint256 baseGas,
-        uint256 gasPrice,
-        address gasToken,
-        address payable refundReceiver,
-        bytes signatures,
-        address msgSender);
-
-    event ActionLog(Action action);
 
     IERC20 public immutable anchorCurrency;
     address public immutable operator;
@@ -79,6 +72,13 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
 
     mapping(address => bool) isTokenAllowed;
     mapping(address => bool) isContractAllowed;
+
+    //[POC limitations] https://github.com/chainhackers/ethonline-2023/issues/39
+    //Hackathon version - the only position
+    uint256 position;
+    uint256 positionsBalanceBeforeTx;
+    uint256 anchorCurrencyBalanceBeforeTx;
+    address currentTxSender;
 
     /**
      * @param anchorCurrency_ - The main or anchor ERC20 token that the vault will manage.
@@ -109,6 +109,17 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
         isTokenAllowed[0x0000000000000000000000000000000000001010] = true; // MATIC //TODO
     }
 
+    fallback() external {}
+
+    function getGuard() internal pure returns (PPGuardValue storage guard) {
+        bytes32 slot = GUARD_STORAGE_SLOT;
+        // solhint-disable-next-line no-inline-assembly
+        assembly {
+            guard.slot := slot
+        }
+    }
+
+
     function initialize(
         GnosisSafeL2 safe_
     ) public initializer {
@@ -116,26 +127,17 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
         //TODO send unlimited approvals for all allowedTokens
     }
 
-
     function totalAssets() public view override(IERC4626, ERC4626) returns (uint256) {
-        //TODO add overall Uniswap positions here
-        return anchorCurrency.balanceOf(address(this));
-    }
-
-    function deposit(uint256 amount) external {
-
-    }
-
-    function withdraw(uint256 amount) external {
-
+        uint256 anchorCurrencyBalance = anchorCurrency.balanceOf(address(safe));
+        return anchorCurrencyBalance + positionValueInAnchorCurrency(position);
     }
 
     function pause() external {
-
+        //TODO
     }
 
     function unpause() external {
-
+        //TODO
     }
 
     function allowedTokensList() external view override returns (address[] memory) {
@@ -159,6 +161,10 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
         bytes memory signatures,
         address msgSender
     ) external override {
+        PPGuardValue storage guard = getGuard();
+        require(!guard.active, "Reentrancy detected");
+        guard.active = true;
+
 //        require(isUniswapContract[to] || isTokenAllowed[to], "Only approvals of allowed tokens to Uniswap and Uniswap contracts allowed"); //TODO iterate over allowed tokens
         if (!isContractAllowed[to] && !isTokenAllowed[to]) {
             emit UnauthorizedActionDetected(to, value, data, operation, safeTxGas, baseGas, gasPrice, gasToken, refundReceiver, signatures, msgSender);
@@ -176,12 +182,117 @@ contract ProfitPalsVault is IProfitPalsVault, ERC4626, Guard, Initializable {
             refundReceiver,
             signatures,
             msgSender));
-        //TODO keep record of mint txs
         //TODO keep record of burn ( decrease liquidity ) txs
+
+        positionsBalanceBeforeTx = getPositionsBalanceInSafe();
+        anchorCurrencyBalanceBeforeTx = anchorCurrency.balanceOf(address(safe));
+        currentTxSender = msgSender;
     }
 
-    function checkAfterExecution(bytes32 txHash, bool success) external override {
+    function checkAfterExecution(bytes32 txHash, bool) external override {
+        getGuard().active = false;
         //TODO get minted position IDs
+        if (currentTxSender == operator) {
+//            require(currentTxSender == tx.origin, "ProfitPalsVault: [POC limitations] manual operation only");
+//            require(_isAnchorBalanceChanged(), "ProfitPalsVault: every opertor action must change anchor currency balance must change ");
+            if (currentTxSender != tx.origin || !_isAnchorBalanceChanged()) {
+                emit UnauthorizedActionOperatorMustChangeAnchorBalance(txHash);
+            }
+        }
+
+        uint256 balanceAfterTx = getPositionsBalanceInSafe();
+        if (positionsBalanceBeforeTx != balanceAfterTx) {
+//            require(positionValueInAnchorCurrency(position) == 0, "ProfitPalsVault: [POC limitations] only one open position at a time is allowed");
+            if(positionValueInAnchorCurrency(position) > 0){
+                emit UnauthorizedActionOnlyOneOpenPositionAllowed(txHash);
+            }
+
+            uint256 positionIndex = balanceAfterTx - 1;
+            position = IERC721Enumerable(UV3_NONFUNGIBLE_POSITION_MANAGER).tokenOfOwnerByIndex(
+                address(safe),
+                positionIndex
+            );
+            emit PositionAcquired(positionIndex);
+        }
     }
 
+    /**
+      * @dev Deposit/mint common workflow.
+      */
+    function _deposit(address caller, address receiver, uint256 assets, uint256 shares) internal virtual override {
+        SafeERC20.safeTransferFrom(anchorCurrency, caller, address(safe), assets);
+        _mint(receiver, shares);
+
+        emit Deposit(caller, receiver, assets, shares);
+    }
+
+    function _withdraw(
+        address caller,
+        address receiver,
+        address owner,
+        uint256 assets,
+        uint256 shares
+    ) internal virtual override {
+        if (caller != owner) {
+            _spendAllowance(owner, caller, shares);
+        }
+
+        _burn(owner, shares);
+
+        bytes memory withdrawData = abi.encodeCall(
+            IERC20.transfer,
+            (receiver, assets)
+        );
+
+        safe.execTransaction(
+            address(anchorCurrency), //to
+            0, //value
+            withdrawData,
+            Enum.Operation.Call,
+            0, // safeTxGas
+            0, // baseGas
+            0, // gasPrice
+            address(0), // gasToken
+            payable(address(this)), // refundReceiver
+            nopSignature
+        );
+
+        emit Withdraw(caller, receiver, owner, assets, shares);
+    }
+
+    function getPositionsBalanceInSafe() private view returns (uint256 balance){
+        balance = IERC721Enumerable(UV3_NONFUNGIBLE_POSITION_MANAGER).balanceOf(address(safe));
+    }
+
+    function positionValueInAnchorCurrency(uint256 positionId) private view returns (uint256 value) {
+        //TODO @silvesterdrago #33 get UniswapV3 position estimate
+        if (position > 0) {
+            uint256 debugFakePositionEstimateStub = 3 * 10 ** 4;
+            value = debugFakePositionEstimateStub;
+        }
+        value = 0;
+    }
+
+    /** @dev See {IERC4626-maxWithdraw}. */
+    function maxWithdraw(address owner) public view override(ERC4626, IERC4626) returns (uint256) {
+        return Math.min(
+            _convertToAssets(balanceOf(owner), Math.Rounding.Floor),
+            anchorCurrency.balanceOf(address(safe)));
+    }
+
+    function anchorCurrencyShare() private view returns (uint256) {
+        return anchorCurrency.balanceOf(address(safe)) / totalAssets();
+    }
+
+    function isValidSignature(bytes memory, bytes memory _signature) public view override returns (bytes4){
+        if (keccak256(_signature) == keccak256(hex"00")) {//TODO do some actual checking
+            return bytes4(EIP1271_MAGIC_VALUE);
+        }
+        return bytes4(0);
+    }
+
+    function _isAnchorBalanceChanged() private view returns (bool) {
+        uint256 anchorBalance = anchorCurrency.balanceOf(address(safe));
+        return anchorBalance != anchorCurrencyBalanceBeforeTx;
+    }
 }
