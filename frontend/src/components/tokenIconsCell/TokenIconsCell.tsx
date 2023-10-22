@@ -11,12 +11,8 @@ export const TokenIconsCell: FC<TokensIconsPropsI> = ({ anchorCurrency, tokens }
   const polygonData: ITokenObject[] = polygonPopular;
 
   const getTokenIcon = (tokenAddress: string) => {
-    console.log('123s', typeof tokenAddress);
     for (const elem of polygonData) {
-      if (elem.address == tokenAddress) {
-        console.log('---', elem.address);
-        console.log('---', tokenAddress);
-        console.log(elem);
+      if (elem.address.toLowerCase() == tokenAddress.toLowerCase()) {
         return elem;
       }
     }
@@ -24,7 +20,6 @@ export const TokenIconsCell: FC<TokensIconsPropsI> = ({ anchorCurrency, tokens }
 
   const getAllTokensIcons = () => {
     const test = getTokenIcon(anchorCurrency);
-    console.log('test', test);
     setAnchorCurrencyInfo(test);
     const tokensInfoList: ITokenObject[] = tokens
       .map((token) => getTokenIcon(token))
@@ -32,12 +27,11 @@ export const TokenIconsCell: FC<TokensIconsPropsI> = ({ anchorCurrency, tokens }
         return token !== undefined;
       });
     setTokensInfo(tokensInfoList);
-    // console.log('result', tokensInfoList);
   };
   useEffect(() => {
     getAllTokensIcons();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [anchorCurrency, tokens]);
 
   return (
     <>
