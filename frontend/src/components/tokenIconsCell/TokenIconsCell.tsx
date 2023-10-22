@@ -12,14 +12,15 @@ export const TokenIconsCell: FC<TokensIconsPropsI> = ({ anchorCurrency, tokens }
 
   const getTokenIcon = (tokenAddress: string) => {
     for (const elem of polygonData) {
-      if (elem.address === tokenAddress) {
+      if (elem.address.toLowerCase() == tokenAddress.toLowerCase()) {
         return elem;
       }
     }
   };
 
   const getAllTokensIcons = () => {
-    setAnchorCurrencyInfo(getTokenIcon(anchorCurrency));
+    const test = getTokenIcon(anchorCurrency);
+    setAnchorCurrencyInfo(test);
     const tokensInfoList: ITokenObject[] = tokens
       .map((token) => getTokenIcon(token))
       .filter((token): token is ITokenObject => {
@@ -30,7 +31,7 @@ export const TokenIconsCell: FC<TokensIconsPropsI> = ({ anchorCurrency, tokens }
   useEffect(() => {
     getAllTokensIcons();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [anchorCurrency, tokens]);
 
   return (
     <>

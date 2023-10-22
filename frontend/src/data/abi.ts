@@ -2,7 +2,7 @@ export const abi = [
   {
     inputs: [
       { internalType: 'contract IERC20', name: 'anchorCurrency_', type: 'address' },
-      { internalType: 'contract IERC20[]', name: 'tokens', type: 'address[]' },
+      { internalType: 'address[]', name: 'tokens', type: 'address[]' },
       { internalType: 'uint256', name: 'operatorFee_', type: 'uint256' },
       { internalType: 'string', name: 'name_', type: 'string' },
       { internalType: 'string', name: 'symbol_', type: 'string' },
@@ -95,11 +95,39 @@ export const abi = [
     type: 'error',
   },
   { inputs: [], name: 'FailedInnerCall', type: 'error' },
+  { inputs: [], name: 'InvalidInitialization', type: 'error' },
   { inputs: [], name: 'MathOverflowedMulDiv', type: 'error' },
+  { inputs: [], name: 'NotInitializing', type: 'error' },
   {
     inputs: [{ internalType: 'address', name: 'token', type: 'address' }],
     name: 'SafeERC20FailedOperation',
     type: 'error',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        components: [
+          { internalType: 'address', name: 'to', type: 'address' },
+          { internalType: 'uint256', name: 'value', type: 'uint256' },
+          { internalType: 'bytes', name: 'data', type: 'bytes' },
+          { internalType: 'enum Enum.Operation', name: 'operation', type: 'uint8' },
+          { internalType: 'uint256', name: 'safeTxGas', type: 'uint256' },
+          { internalType: 'uint256', name: 'baseGas', type: 'uint256' },
+          { internalType: 'uint256', name: 'gasPrice', type: 'uint256' },
+          { internalType: 'address', name: 'gasToken', type: 'address' },
+          { internalType: 'address payable', name: 'refundReceiver', type: 'address' },
+          { internalType: 'bytes', name: 'signatures', type: 'bytes' },
+          { internalType: 'address', name: 'msgSender', type: 'address' },
+        ],
+        indexed: false,
+        internalType: 'struct IProfitPalsVault.Action',
+        name: 'action',
+        type: 'tuple',
+      },
+    ],
+    name: 'ActionLog',
+    type: 'event',
   },
   {
     anonymous: false,
@@ -125,11 +153,62 @@ export const abi = [
   {
     anonymous: false,
     inputs: [
+      { indexed: true, internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+    ],
+    name: 'FungibleTokenAcquired',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: false, internalType: 'uint64', name: 'version', type: 'uint64' }],
+    name: 'Initialized',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: true, internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'PositionAcquired',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
       { indexed: true, internalType: 'address', name: 'from', type: 'address' },
       { indexed: true, internalType: 'address', name: 'to', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'value', type: 'uint256' },
     ],
     name: 'Transfer',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'to', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'value', type: 'uint256' },
+      { indexed: false, internalType: 'bytes', name: 'data', type: 'bytes' },
+      { indexed: false, internalType: 'enum Enum.Operation', name: 'operation', type: 'uint8' },
+      { indexed: false, internalType: 'uint256', name: 'safeTxGas', type: 'uint256' },
+      { indexed: false, internalType: 'uint256', name: 'baseGas', type: 'uint256' },
+      { indexed: false, internalType: 'uint256', name: 'gasPrice', type: 'uint256' },
+      { indexed: false, internalType: 'address', name: 'gasToken', type: 'address' },
+      { indexed: false, internalType: 'address payable', name: 'refundReceiver', type: 'address' },
+      { indexed: false, internalType: 'bytes', name: 'signatures', type: 'bytes' },
+      { indexed: false, internalType: 'address', name: 'msgSender', type: 'address' },
+    ],
+    name: 'UnauthorizedActionDetected',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: false, internalType: 'bytes32', name: 'txHash', type: 'bytes32' }],
+    name: 'UnauthorizedActionOnlyOneOpenPositionAllowed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: false, internalType: 'bytes32', name: 'txHash', type: 'bytes32' }],
+    name: 'UnauthorizedActionOperatorMustChangeAnchorBalance',
     type: 'event',
   },
   {
@@ -144,6 +223,7 @@ export const abi = [
     name: 'Withdraw',
     type: 'event',
   },
+  { stateMutability: 'nonpayable', type: 'fallback' },
   {
     inputs: [
       { internalType: 'address', name: 'owner', type: 'address' },
@@ -157,7 +237,7 @@ export const abi = [
   {
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'allowedTokens',
-    outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -171,7 +251,7 @@ export const abi = [
   {
     inputs: [],
     name: 'allowedTokensList',
-    outputs: [{ internalType: 'contract IERC20[]', name: '', type: 'address[]' }],
+    outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -207,6 +287,35 @@ export const abi = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'bytes32', name: 'txHash', type: 'bytes32' },
+      { internalType: 'bool', name: '', type: 'bool' },
+    ],
+    name: 'checkAfterExecution',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: 'to', type: 'address' },
+      { internalType: 'uint256', name: 'value', type: 'uint256' },
+      { internalType: 'bytes', name: 'data', type: 'bytes' },
+      { internalType: 'enum Enum.Operation', name: 'operation', type: 'uint8' },
+      { internalType: 'uint256', name: 'safeTxGas', type: 'uint256' },
+      { internalType: 'uint256', name: 'baseGas', type: 'uint256' },
+      { internalType: 'uint256', name: 'gasPrice', type: 'uint256' },
+      { internalType: 'address', name: 'gasToken', type: 'address' },
+      { internalType: 'address payable', name: 'refundReceiver', type: 'address' },
+      { internalType: 'bytes', name: 'signatures', type: 'bytes' },
+      { internalType: 'address', name: 'msgSender', type: 'address' },
+    ],
+    name: 'checkTransaction',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'uint256', name: 'shares', type: 'uint256' }],
     name: 'convertToAssets',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
@@ -238,10 +347,20 @@ export const abi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'amount', type: 'uint256' }],
-    name: 'deposit',
+    inputs: [{ internalType: 'contract GnosisSafeL2', name: 'safe_', type: 'address' }],
+    name: 'initialize',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes', name: '', type: 'bytes' },
+      { internalType: 'bytes', name: '_signature', type: 'bytes' },
+    ],
+    name: 'isValidSignature',
+    outputs: [{ internalType: 'bytes4', name: '', type: 'bytes4' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -345,6 +464,13 @@ export const abi = [
   },
   {
     inputs: [],
+    name: 'safe',
+    outputs: [{ internalType: 'contract GnosisSafeL2', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'symbol',
     outputs: [{ internalType: 'string', name: '', type: 'string' }],
     stateMutability: 'view',
@@ -386,13 +512,6 @@ export const abi = [
     type: 'function',
   },
   { inputs: [], name: 'unpause', outputs: [], stateMutability: 'nonpayable', type: 'function' },
-  {
-    inputs: [{ internalType: 'uint256', name: 'amount', type: 'uint256' }],
-    name: 'withdraw',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
   {
     inputs: [
       { internalType: 'uint256', name: 'assets', type: 'uint256' },

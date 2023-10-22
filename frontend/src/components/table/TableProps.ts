@@ -4,5 +4,6 @@ export interface TablePropsI {
     operatorFee: number;
     anchorCurrency: string;
     allowedTokens: string[];
+    total: number;
   }[];
 }
