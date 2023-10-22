@@ -150,7 +150,7 @@ Our ETHOnline2023 focus: integration with Uniswap and harnessing Safe smart wall
 **Implemented Features**:
 
 - An interface for operators to create pools.
-- A "Factory" contract (link to the contract) designed to create pool contracts. It includes a "Guard" mechanism to impose restrictions on operator activities within the pool (link to the contract).
+- A "Factory" [contract](https://polygonscan.com/address/0xf33096dB1f341C0249aEdd164B4DeA5E2FaBecdE) designed to create pool contracts. It includes a "Guard" mechanism to impose restrictions on operator activities within the [pool](https://polygonscan.com/address/0xd95556ce580e8b7f923cb739e6b0291734fef437).
 - The capability to use the pool contract as a wallet on the Uniswap service via Safe Wallet.
 
 ### [POC VERSION LIMITATIONS](https://github.com/chainhackers/ethonline-2023/issues/39)
@@ -178,8 +178,8 @@ Monorepo setup: smart contracts in root, frontend in its folder. We integrate Fo
 
 ### Deployed instances
 
-- [ProfitPalsVaultFactory](https://polygonscan.com/address/0x06563f72147B247391d44a5aDDcFEBEBe7dc7C4C)
-- [ProfitPalsVault(USDC, [WBTC, WETH])](https://polygonscan.com/address/0xd783b002954df35a02bfa3f1e8e0462078d27f84#code)
+- [ProfitPalsVaultFactory](https://polygonscan.com/address/0xf33096dB1f341C0249aEdd164B4DeA5E2FaBecdE)
+- [ProfitPalsVault](https://polygonscan.com/address/0xd95556ce580e8b7f923cb739e6b0291734fef437)
 
 
 ### Contribute
