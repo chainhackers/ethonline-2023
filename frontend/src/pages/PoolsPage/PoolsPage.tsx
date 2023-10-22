@@ -53,7 +53,7 @@ export const PoolsPage: FC<PoolsPagePropsI> = ({ poolsType }) => {
           allowedTokens: allowedTokens,
           anchorCurrency: anchorCurrency,
           operatorFee: operatorFee,
-        };
+        } as TPool;
       })
     );
     return Promise.resolve(result);
