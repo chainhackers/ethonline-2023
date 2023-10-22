@@ -20,9 +20,11 @@ interface IProfitPalsVaultFactory {
     event ProfitPalsVaultCreated(
         IProfitPalsVault indexed vault,
         IERC20 indexed anchorCurrency,
+        address[] allowedTokens,
         uint256 operatorFee,
         string name,
-        string symbol
+        string symbol,
+        address safe
     );
 
     function createVault(

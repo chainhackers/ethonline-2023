@@ -117,7 +117,7 @@ contract ProfitPalsVaultFactory is IProfitPalsVaultFactory, ISignatureValidator 
 
         vault.initialize(safe);
 
-        emit ProfitPalsVaultCreated(vault, anchorCurrency, operatorFee, name, symbol);
+        emit ProfitPalsVaultCreated(vault, anchorCurrency, tokens, operatorFee, name, symbol, address(safe));
 
         return vault;
     }

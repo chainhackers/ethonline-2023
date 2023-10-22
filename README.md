@@ -22,8 +22,8 @@ Our ETHOnline2023 focus: integration with Uniswap and harnessing Safe smart wall
 
 Monorepo setup: smart contracts in root, frontend in its folder. We integrate Foundry/Forge with GitHub Actions for streamlined CI/CD.
 ### Deployed instances
-* [ProfitPalsVaultFactory](https://polygonscan.com/address/0x72E5D8169AD4dF36f5392268E72F529b9364E7a3#code)  
-* [ProfitPalsVault(USDC, [WBTC, WETH])](https://polygonscan.com/address/0x3d7d3a11a54e0128852f39991dbe6f0783305272#code)
+* [ProfitPalsVaultFactory](https://polygonscan.com/address/0xf33096dB1f341C0249aEdd164B4DeA5E2FaBecdE#code)  
+* [ProfitPalsVault(USDC, [WBTC, WETH])](https://polygonscan.com/address/0xd95556ce580e8b7f923cb739e6b0291734fef437#code)
 
 
 ### Clone/Checkout
